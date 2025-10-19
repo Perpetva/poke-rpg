@@ -1,4 +1,5 @@
 import express from "express"
+import { commandHandler } from "./src/commandHandler.js"
 
 const app = express()
 const PORT = process.env.PORT || 80
@@ -14,6 +15,7 @@ app.post("/connect", (req, res) => {
 app.post("/message", (req, res) => {
     console.log("💬 Mensagem recebida!")
     console.log(req.body)
+    commandHandler(req.body)
     res.sendStatus(200)
 })
 
