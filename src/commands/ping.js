@@ -1,4 +1,4 @@
-import { sendMessage } from '../services/zapi.js'
+import { sendMessage } from '../services/wapi.js'
 
 export default {
     name: 'ping',

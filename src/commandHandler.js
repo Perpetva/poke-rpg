@@ -9,12 +9,11 @@ export async function commandHandler(objMessage) {
         commands.set(command.name, command)
     }
 
-    const text = objMessage.text.message
-    const userPhone = objMessage.participantPhone 
-    const groupId = objMessage.phone
+    const text = objMessage.msgContent.conversation
+    const userPhone = objMessage.sender.id.split(':')[0] 
+    const groupId = objMessage.chat.id
 
     if (objMessage.fromMe) return
-    if (objMessage.forwarded) return
     if (!objMessage.isGroup) return
     if (!text.startsWith('!')) return
     
@@ -27,7 +26,7 @@ export async function commandHandler(objMessage) {
     try {
         setTimeout(() => {
             command.execute(objMessage, args, userPhone, groupId)
-        }, 800)
+        }, 400)
 
     } catch (e) {
         console.error(`Erro ao executar o comando ${commandName}:`, e)
