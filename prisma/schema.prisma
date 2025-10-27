@@ -1,15 +1,96 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model Jogador {
+  id         Int       @id @default(autoincrement())
+  name       String
+  phone      String    @unique
+  picUrl     String?
+  pokeCoins  Int       @default(500)
+  diaryLogin DateTime?
+  items      Json?
+  pokemons   Pokemon[]
+}
+
+model Pokemon {
+  id                 Int      @id @default(autoincrement())
+  specieId           Int
+  name               String
+  level              Int
+  exp                Int
+  maxHp              Int
+  currentHp          Int
+  types              String[]
+  evolutionStage     Int
+  nextEvolutionLevel Int
+
+  jogadorId Int
+  owner     Jogador @relation(fields: [jogadorId], references: [id])
+
+  ivId Int? @unique
+  iv   Iv?  @relation(fields: [ivId], references: [id])
+
+  baseStatsId Int?       @unique
+  baseStats   BaseStats? @relation(fields: [baseStatsId], references: [id])
+
+  currentStatsId Int?          @unique
+  currentStats   CurrentStats? @relation(fields: [currentStatsId], references: [id])
+
+  moves Move[]
+}
+
+model Iv {
+  id             Int @id @default(autoincrement())
+  hp             Int
+  speed          Int
+  attack         Int
+  defense        Int
+  specialAttack  Int
+  specialDefense Int
+
+  pokemon Pokemon?
+}
+
+model BaseStats {
+  id             Int @id @default(autoincrement())
+  hp             Int
+  speed          Int
+  attack         Int
+  defense        Int
+  specialAttack  Int
+  specialDefense Int
+
+  pokemon Pokemon?
+}
+
+model CurrentStats {
+  id             Int @id @default(autoincrement())
+  hp             Int
+  speed          Int
+  attack         Int
+  defense        Int
+  specialAttack  Int
+  specialDefense Int
+
+  pokemon Pokemon?
+}
+
+model Move {
+  id           Int    @id @default(autoincrement())
+  name         String
+  type         String
+  maxPp        Int
+  currentPp    Int
+  power        Int
+  accuracy     Int
+  moveCategory String
+
+  pokemonId Int?
+  pokemon   Pokemon? @relation(fields: [pokemonId], references: [id])
 }
