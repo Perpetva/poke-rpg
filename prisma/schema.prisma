@@ -29,6 +29,7 @@ model Pokemon {
   types              String[]
   evolutionStage     Int
   nextEvolutionLevel Int
+  caughtDate         DateTime @default(now())
 
   jogadorId Int
   owner     Jogador @relation(fields: [jogadorId], references: [id])

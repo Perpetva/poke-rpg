@@ -26,7 +26,7 @@ export async function sendMessage(phone, message) {
             }
         )
 
-        console.log("Resposta WAPI:", response.data)
+        // console.log("Resposta WAPI:", response.data)
 
     } catch (e) {
         console.error("Erro ao enviar mensagem via WAPI:", e)
