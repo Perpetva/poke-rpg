@@ -7,7 +7,7 @@ import 'dotenv/config'
 export async function commandHandler(objMessage) {
     const commands = new Map()
 
-    // Helper para carregar comandos por diretório (member/admin/owner)
+    // helper para carregar comandos por diretorio
     const loadRoleCommands = async (role) => {
         const dir = `./src/commands/${role}`
         if (!fs.existsSync(dir)) return
