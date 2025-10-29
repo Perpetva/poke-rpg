@@ -9,9 +9,9 @@ export default {
         const newPlayerName = args[0]
 
         if (currentPlayer) 
-            return sendMessage(groupId, 'Você já está registrado como jogador!')
+            return sendMessage(groupId, `Você já está registrado como ${currentPlayer.getName()}`)
         
-        if (args.length > 0) 
+        if (args.length > 1) 
             return sendMessage(groupId, 'Seu nick só pode ter uma palavra!')
 
         if (!newPlayerName) 

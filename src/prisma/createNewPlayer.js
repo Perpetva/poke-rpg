@@ -1,6 +1,4 @@
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import { prisma } from './client.js'
 
 export async function createNewPlayer(id, phone, name) {
     const newPlayer = await prisma.jogador.create({
@@ -10,7 +8,5 @@ export async function createNewPlayer(id, phone, name) {
             name
         }
     })
-
-    await prisma.$disconnect()
     return newPlayer
 }

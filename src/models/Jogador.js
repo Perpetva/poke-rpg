@@ -1,6 +1,7 @@
 import Pokemon from './Pokemon.js'
 import Item from './Item.js'
 import { createNewPlayer } from '../prisma/createNewPlayer.js'
+import { getPlayerByIdFromDb } from '../prisma/getPlayerByIdFromDb.js'
 
 class Jogador {
     constructor(id, name, phone) {
@@ -14,9 +15,16 @@ class Jogador {
         this.pokemons = []
     }
 
-    async registerNewPlayer(id, phone, name) {
+    static async registerNewPlayer(id, phone, name) {
         const dbPlayer = await createNewPlayer(id, phone, name)
         return new Jogador(dbPlayer.id, dbPlayer.name, dbPlayer.phone)
+    }
+
+    static async getPlayerById(phone) {
+        const record = await getPlayerByIdFromDb(phone)
+        if (!record) return null
+
+        return new Jogador(record.id, record.name, record.phone)
     }
 
     addPokemon(pokemon) {
@@ -34,6 +42,10 @@ class Jogador {
 
     getName() {
         return this.name
+    }
+
+    getId() {
+        return this.id
     }
 }
 
