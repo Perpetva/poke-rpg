@@ -16,6 +16,8 @@ model Jogador {
   diaryLogin DateTime?
   items      Json?
   pokemons   Pokemon[]
+
+  Item Item[]
 }
 
 model Pokemon {
@@ -94,4 +96,15 @@ model Move {
 
   pokemonId Int?
   pokemon   Pokemon? @relation(fields: [pokemonId], references: [id])
+}
+
+model Item {
+  id           Int    @id @default(autoincrement())
+  pokeBalls    Int    @default(5)
+  potions      Int    @default(0)
+  revives      Int    @default(0)
+  totalCures   Int    @default(0)
+  rareCandies  Int    @default(0)
+  jogadorId    String
+  jogador      Jogador @relation(fields: [jogadorId], references: [id])
 }

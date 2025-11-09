@@ -8,28 +8,26 @@ export async function searchGroupAdmins(groupId) {
         return null
     }
 
-    const instanceId = process.env.WAPI_INSTANCE_ID
-    const token = process.env.WAPI_TOKEN
+    const apiUrl = process.env.WAHA_URL || "http://localhost:3000"
+    const apiKey = process.env.WAHA_API_KEY 
+    const session = process.env.WAHA_SESSION 
 
-    const url = `https://api.w-api.app/v1/group/get-Participants?instanceId=${instanceId}&groupId=${groupId}`
+    const url = `${apiUrl}/api/${session}/groups/${groupId}`
 
     try {
-        const response = await axios.get(
-            url,
-            {
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "Content-Type": "application/json"
-                },
-                timeout: 10000
-            }
-        )
+        const response = await axios.get(url, {
+            headers: {
+                "accept": "application/json",
+                ...(apiKey && { "X-Api-Key": apiKey })
+            },
+            timeout: 10000
+        })
 
-        console.log("RESPONSE DO GRUPO: ", response.data)
+        console.log("📋 INFO DO GRUPO:", response.data)
         return response.data
 
     } catch (e) {
-        console.error("Erro ao buscar administradores do grupo:", e)
+        console.error("❌ Erro ao buscar administradores do grupo:", e.message)
         return null
     }
 }

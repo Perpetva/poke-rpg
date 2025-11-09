@@ -7,21 +7,6 @@ class Item {
         this.rareCandies = 0
     }
 
-    getItemCount(item) {
-        return this[item]
-    }
-
-    addItem(item, amount = 1) {
-        this[item] += amount
-    }
-
-    useItem(item, amount = 1) {
-        if (this[item] >= amount) {
-            this[item] -= amount
-            return true
-        }
-        return false
-    }
 }
 
 export default Item

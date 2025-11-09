@@ -1,6 +1,12 @@
-export function normalizeNumber(value) {
-    if (!value) return ''
-    const noSuffix = value.split(':')[0]
+export function normalizeNumber(value = '') {
+    if (typeof value !== 'string') return ''
+    
+    const match = value.match(/(\d{6,15})(?=@|$)/g)
+    if (!match) return ''
+    
+    return match.pop()
+}
 
-    return noSuffix.split('@')[0].replace(/\D/g, '')
+export function randomNumber(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min
 }

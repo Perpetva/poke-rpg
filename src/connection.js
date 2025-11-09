@@ -1,7 +1,11 @@
 import express from "express"
 import { commandHandler } from "./commandHandler.js"
+import { connectToDatabase } from "./database/connectionDatabase.js"
 
 export async function connection() {
+
+    await connectToDatabase()
+
     const app = express()
     const PORT = process.env.PORT || 80
 

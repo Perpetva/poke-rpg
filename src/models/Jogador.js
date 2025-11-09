@@ -1,7 +1,5 @@
 import Pokemon from './Pokemon.js'
 import Item from './Item.js'
-import { createNewPlayer } from '../prisma/createNewPlayer.js'
-import { getPlayerByIdFromDb } from '../prisma/getPlayerByIdFromDb.js'
 
 class Jogador {
     constructor(id, name, phone) {
@@ -13,18 +11,6 @@ class Jogador {
         this.diaryLogin = null
         this.items = new Item()
         this.pokemons = []
-    }
-
-    static async registerNewPlayer(id, phone, name) {
-        const dbPlayer = await createNewPlayer(id, phone, name)
-        return new Jogador(dbPlayer.id, dbPlayer.name, dbPlayer.phone)
-    }
-
-    static async getPlayerById(phone) {
-        const record = await getPlayerByIdFromDb(phone)
-        if (!record) return null
-
-        return new Jogador(record.id, record.name, record.phone)
     }
 
     addPokemon(pokemon) {
@@ -46,6 +32,42 @@ class Jogador {
 
     getId() {
         return this.id
+    }
+
+    getPhone() {
+        return this.phone
+    }
+
+    getPokeCoins() {
+        return this.pokeCoins
+    }
+
+    getPicUrl() {
+        return this.picUrl
+    }
+
+    totalPokemonsOwned() {
+        return this.pokemons.length
+    }
+
+    getPokebola() {
+        return this.items.getItemCount('pokeBalls')
+    }
+
+    getPocao() {
+        return this.items.getItemCount('potions')
+    }
+
+    getReviver() {
+        return this.items.getItemCount('revives')
+    }
+
+    getCuraTotal() {
+        return this.items.getItemCount('totalCures')
+    }
+
+    getDoceRaro() {
+        return this.items.getItemCount('rareCandies')
     }
 }
 

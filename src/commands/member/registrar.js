@@ -1,4 +1,4 @@
-import { sendMessage } from '../../services/wapi.js'
+import { sendMessage } from '../../services/waha.js'
 import Jogador from '../../models/Jogador.js'
 
 export default {
@@ -9,7 +9,7 @@ export default {
         const newPlayerName = args[0]
 
         if (currentPlayer) 
-            return sendMessage(groupId, `Você já está registrado como ${currentPlayer.getName()}`)
+            return sendMessage(groupId, `Você já está registrado como _${currentPlayer.getName()}_`)
         
         if (args.length > 1) 
             return sendMessage(groupId, 'Seu nick só pode ter uma palavra!')
@@ -19,6 +19,6 @@ export default {
 
         const newPlayer = await Jogador.registerNewPlayer(userPhone, userPhone, newPlayerName)
 
-        sendMessage(groupId, `Olá ${newPlayer.getName()}, você foi registrado com sucesso! Boa sorte em sua jornada Pokémon!`)
+        sendMessage(groupId, `Olá *${newPlayer.getName()}*! Você foi registrado com sucesso! Boa sorte em sua jornada Pokémon!`)
     }
 }
