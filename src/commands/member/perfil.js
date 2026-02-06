@@ -1,5 +1,5 @@
 import { perfilMessage } from '../../middlewares/defaultMessages.js';
-import { sendMessage } from '../../services/waha.js'
+import { sendMessage } from '../../services/wapi.js'
 import Jogador from '../../models/Jogador.js'
 
 export default {

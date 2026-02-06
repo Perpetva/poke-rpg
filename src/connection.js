@@ -7,7 +7,7 @@ export async function connection() {
     await connectToDatabase()
 
     const app = express()
-    const PORT = process.env.PORT || 80
+    const PORT = 80
 
     app.use(express.json())
 

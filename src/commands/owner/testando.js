@@ -1,4 +1,4 @@
-import { sendMessage } from '../../services/waha.js'
+import { sendMessage } from '../../services/wapi.js'
 
 export default {
     name: 'testando',

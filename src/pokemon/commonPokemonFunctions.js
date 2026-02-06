@@ -1,4 +1,5 @@
 import { randomNumber } from "../utils/commonFunctions.js"
+import { TOTAL_POKEMONS } from "./config/config.js"
 
 export async function isUnevolvedOrLegendaryPokemon() {
     let isValid = false;
@@ -6,7 +7,7 @@ export async function isUnevolvedOrLegendaryPokemon() {
     let randomId = null;
 
     while (!isValid) {
-        randomId = await randomNumber(1, config.TOTAL_POKEMONS);
+        randomId = await randomNumber(1, TOTAL_POKEMONS);
 
         const pokemonData = await fetch(`https://pokeapi.co/api/v2/pokemon/${randomId}`)
             .then(res => res.json());

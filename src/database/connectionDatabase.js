@@ -1,10 +1,12 @@
 import { Pool } from 'pg'
+import dotenv from 'dotenv'
+dotenv.config()
 
 export async function connectToDatabase() {
     if (global.connection)
         return global.connection
 
-    const connectionUrl = 'postgresql://postgres:admin@localhost:5432/poke_rpg'
+    const connectionUrl = `postgresql://postgres:${process.env.DB_PASSWORD}@localhost:5432/poke_rpg`
 
     const pool = new Pool({
         connectionString: connectionUrl

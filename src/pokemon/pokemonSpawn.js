@@ -1,8 +1,9 @@
 import { isUnevolvedOrLegendaryPokemon } from "./commonPokemonFunctions.js"
 import { randomNumber } from "../utils/commonFunctions.js"
-import { getValidMovesFromPokeAPI } from "./movesPokemonFunctions.js"
+import { getValidMovesFromPokeAPI } from "./getValidMoves.js"
 import { setPokemonAtual } from "./pokemonStructures.js"
 import { getPokemonNameById } from "./getPokemonNameById.js"
+import { sendSticker } from "../services/wapi.js"
 
 const currentPokemonSpawned = {
     number: null,
@@ -36,7 +37,7 @@ export async function pokemonSpawn(chatId) {
 
     setPokemonAtual(currentPokemon)
 
-    await sendPokemonSticker(chatId, randomId)
+    await sendSticker(chatId, randomId)
 
     currentPokemonSpawned.alreadyCaught = false
     currentPokemonSpawned.number = randomId
