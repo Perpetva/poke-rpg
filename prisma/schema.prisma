@@ -26,7 +26,6 @@ model Pokemon {
   name               String
   level              Int
   exp                Int
-  maxHp              Int
   currentHp          Int
   types              String[]
   evolutionStage     Int
@@ -41,9 +40,6 @@ model Pokemon {
 
   baseStatsId Int?       @unique
   baseStats   BaseStats? @relation(fields: [baseStatsId], references: [id])
-
-  currentStatsId Int?          @unique
-  currentStats   CurrentStats? @relation(fields: [currentStatsId], references: [id])
 
   moves Move[]
 }
@@ -61,18 +57,6 @@ model Iv {
 }
 
 model BaseStats {
-  id             Int @id @default(autoincrement())
-  hp             Int
-  speed          Int
-  attack         Int
-  defense        Int
-  specialAttack  Int
-  specialDefense Int
-
-  pokemon Pokemon?
-}
-
-model CurrentStats {
   id             Int @id @default(autoincrement())
   hp             Int
   speed          Int

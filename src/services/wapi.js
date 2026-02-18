@@ -26,8 +26,6 @@ export async function sendMessage(phone, message) {
             }
         )
 
-        console.log("Resposta WAPI:", response.data)
-
     } catch (e) {
         console.error("Erro ao enviar mensagem via WAPI:", e)
     }
@@ -59,9 +57,35 @@ export async function sendSticker(phone, randomId) {
             }
         )
 
-        console.log("Resposta WAPI:", response.data)
-
     } catch (e) {
         console.error("Erro ao enviar sticker via WAPI:", e)
+    }
+}
+
+export async function sendImageWithCaption(phone, image, caption) {
+    if (!phone || !image || !caption) {
+        console.error('sendImageWithCaption: phone, image ou caption está vazio!')
+        return
+    }
+
+    const instanceId = process.env.WAPI_INSTANCE_ID
+    const token = process.env.WAPI_TOKEN
+
+    const url = `https://api.w-api.app/v1/message/send-image?instanceId=${instanceId}`
+
+    try {
+        const response = await axios.post(
+            url,
+            { phone, image, caption },
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                timeout: 10000
+            }
+        )
+    } catch (e) {
+        console.error("Erro ao enviar imagem com legenda via WAPI:", e)
     }
 }

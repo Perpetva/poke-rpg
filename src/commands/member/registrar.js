@@ -6,19 +6,29 @@ export default {
     description: 'Registra um novo jogador',
     async execute(objMessage, args, userPhone, groupId) {
         const currentPlayer = await Jogador.getPlayerById(userPhone)
-        const newPlayerName = args[0]
+        const newPlayerName = args[0]?.trim()
 
         if (currentPlayer) 
-            return sendMessage(groupId, `Você já está registrado como _${currentPlayer.getName()}_`)
+            return await sendMessage(groupId, `Você já está registrado como _${currentPlayer.getName()}_`)
         
         if (args.length > 1) 
             return sendMessage(groupId, 'Seu nick só pode ter uma palavra!')
 
         if (!newPlayerName) 
-            return sendMessage(groupId, 'Por favor, forneça um nick!')
+            return await sendMessage(groupId, 'Por favor, forneça um nick!')
 
-        const newPlayer = await Jogador.registerNewPlayer(userPhone, userPhone, newPlayerName)
+        try {
+            const newPlayer = await Jogador.createPlayer({
+                id: userPhone,
+                name: newPlayerName,
+                phone: userPhone
+            })
 
-        sendMessage(groupId, `Olá *${newPlayer.getName()}*! Você foi registrado com sucesso! Boa sorte em sua jornada Pokémon!`)
+            return await sendMessage(groupId, `✅ Registro concluído! Bem-vindo, *${newPlayer.getName()}*! Você começou com *${newPlayer.getPokebola()}* Pokébolas.`)
+
+        } catch (e) {
+            console.error('Erro registrar.js: ', e)
+            return await sendMessage(groupId, '❌ Não consegui concluir seu registro agora. Tente novamente em instantes.')
+        }
     }
 }

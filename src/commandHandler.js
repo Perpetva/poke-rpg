@@ -4,6 +4,18 @@ import { sendMessage } from './services/wapi.js'
 import { normalizeNumber } from './utils/commonFunctions.js'
 import 'dotenv/config'
 
+function extractMessageText(objMessage) {
+    const msgContent = objMessage?.msgContent || {}
+
+    return (
+        msgContent.conversation ||
+        msgContent.extendedTextMessage?.text ||
+        msgContent.imageMessage?.caption ||
+        msgContent.videoMessage?.caption ||
+        ''
+    )
+}
+
 export async function commandHandler(objMessage) {
     const commands = new Map()
 
@@ -23,7 +35,7 @@ export async function commandHandler(objMessage) {
     await loadRoleCommands('admin')
     await loadRoleCommands('owner')
 
-    const text = objMessage.msgContent?.conversation || ''
+    const text = extractMessageText(objMessage)
     const rawSenderId = objMessage.sender?.id || ''
     const userPhone = rawSenderId.split(':')[0]
     const groupId = objMessage.chat?.id

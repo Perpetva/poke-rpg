@@ -1,5 +1,5 @@
 class BaseStats {
-    constructor(hp, speed, attack, defense, specialAttack, specialDefense) {
+    constructor(hp, attack, defense, specialAttack, specialDefense, speed) {
         this.hp = hp
         this.speed = speed
         this.attack = attack
