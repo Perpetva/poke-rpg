@@ -3,7 +3,7 @@ SELECT
 	j.id,
 	j.name,
 	j.phone,
-	j."picUrl",
+	j."profileImage",
 	j."pokeCoins",
 	j."diaryLogin",
 	i."pokeBalls",
@@ -19,7 +19,7 @@ WHERE j.id = $1
 export const CREATE_PLAYER = `
 INSERT INTO "Jogador" (id, name, phone)
 VALUES ($1, $2, $3)
-RETURNING id, name, phone, "picUrl", "pokeCoins", "diaryLogin"
+RETURNING id, name, phone, "profileImage", "pokeCoins", "diaryLogin"
 `
 
 export const CREATE_PLAYER_ITEMS = `
@@ -28,8 +28,8 @@ VALUES ($1)
 RETURNING "pokeBalls", "potions", "revives", "totalCures", "rareCandies"
 `
 
-export const UPDATE_PLAYER_PIC_URL = `
+export const UPDATE_PLAYER_PROFILE_IMAGE = `
 UPDATE "Jogador"
-SET "picUrl" = $1
+SET "profileImage" = $1
 WHERE id = $2
 `

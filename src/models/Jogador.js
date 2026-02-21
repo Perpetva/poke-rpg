@@ -3,11 +3,11 @@ import * as queries from './queries/queries.js'
 import Item from './Item.js'
 
 class Jogador {
-    constructor(id, name, phone, picUrl = null, pokeCoins = 500, diaryLogin = null, items = new Item()) {
+    constructor(id, name, phone, profileImage = null, pokeCoins = 500, diaryLogin = null, items = new Item()) {
         this.id = id
         this.name = name
         this.phone = phone
-        this.picUrl = picUrl
+        this.profileImage = profileImage
         this.pokeCoins = pokeCoins
         this.diaryLogin = diaryLogin
         this.items = items
@@ -30,14 +30,14 @@ class Jogador {
         return this.pokeCoins
     }
 
-    getPicUrl() {
-        return this.picUrl
+    getProfileImage() {
+        return this.profileImage
     }
 
-    async setFotoUrl(url) {
+    async setProfileImage(imageBuffer) {
         const pool = await connectToDatabase()
-        await pool.query(queries.UPDATE_PLAYER_PIC_URL, [url, this.id])
-        this.picUrl = url
+        await pool.query(queries.UPDATE_PLAYER_PROFILE_IMAGE, [imageBuffer, this.id])
+        this.profileImage = imageBuffer
     }
 
     totalPokemonsOwned() {
@@ -80,7 +80,7 @@ class Jogador {
             row.id,
             row.name,
             row.phone,
-            row.picUrl ?? null,
+            row.profileImage ?? null,
             row.pokeCoins ?? 500,
             row.diaryLogin ?? null,
             items

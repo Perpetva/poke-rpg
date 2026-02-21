@@ -11,7 +11,7 @@ model Jogador {
   id         String    @id
   name       String
   phone      String    @unique
-  picUrl     String?
+  profileImage Bytes?
   pokeCoins  Int       @default(500)
   diaryLogin DateTime?
   items      Json?

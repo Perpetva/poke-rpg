@@ -1,5 +1,5 @@
 import { perfilMessage } from '../../middlewares/defaultMessages.js';
-import { sendImageWithCaption, sendMessage } from '../../services/wapi.js'
+import { imageBufferToBase64DataUri, sendImageWithCaption, sendMessage } from '../../services/wapi.js'
 import Jogador from '../../models/Jogador.js'
 
 export default {
@@ -11,12 +11,14 @@ export default {
         if (!currentPlayer)
             return await sendMessage(groupId, '⚠️ Você precisa se registrar primeiro usando o comando !registrar <nickname>')
 
-        const profilePhoto = currentPlayer?.getPicUrl() || null
+        const profileImageBuffer = currentPlayer?.getProfileImage() || null
         const profileMessage = perfilMessage(currentPlayer)
 
-        if (!profilePhoto) {
-            return await sendMessage(groupId, `${profileMessage}\n\n⚠️ Você ainda não tem foto de jogador. Para adicionar digite: _!foto <link da imagem>_`)
+        if (!profileImageBuffer) {
+            return await sendMessage(groupId, `${profileMessage}\n\n⚠️ Você ainda não tem foto de jogador. Para adicionar, envie uma imagem com a legenda _!foto_.`)
         }
+
+        const profilePhoto = imageBufferToBase64DataUri(profileImageBuffer)
 
         return await sendImageWithCaption(
             groupId,

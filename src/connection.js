@@ -17,15 +17,16 @@ export async function connection() {
     })
 
     app.post("/message", (req, res) => {
+        console.log("📩 Mensagem recebida:", req.body)
         commandHandler(req.body)
         res.sendStatus(200)
     })
 
     app.get("/", (req, res) => {
-        res.send("Servidor Express rodando!");
+        res.send("Servidor Express rodando!")
     })
 
     app.listen(PORT, () => {
-        console.log(`🚀 Servidor rodando na porta ${PORT}`);
+        console.log(`🚀 Servidor rodando na porta ${PORT}`)
     })
 }

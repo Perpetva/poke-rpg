@@ -1,31 +1,36 @@
-import { sendMessage, sendImageWithCaption } from "../../services/wapi.js"
+import { sendMessage, sendImageWithCaption, downloadImageMedia, imageBufferToBase64DataUri, extractImageMessageMetadata } from "../../services/wapi.js"
 import Jogador from "../../models/Jogador.js"
-import { isImageUrl } from "../../utils/isImageUrl.js"
 
 export default {
     name: 'foto',
     description: 'Atualiza a foto do jogador',
-    async execute(objMessage, args, userPhone, groupId) {   
+    async execute(objMessage, args, userPhone, groupId) {
         const currentPlayer = await Jogador.getPlayerById(userPhone)
-        const myUrlPhoto = args[0]
 
-        console.log('ENTROU NO FOTO 1')
-        
         if (!currentPlayer)
             return await sendMessage(groupId, '⚠️ Você precisa se registrar primeiro usando o comando !registrar <nickname>')
 
-        console.log('ENTROU NO FOTO 2')
+        const imageMetadata = extractImageMessageMetadata(objMessage)
+        if (!imageMetadata) {
+            return await sendMessage(groupId, '⚠️ Envie uma imagem com a legenda _!foto_ para atualizar sua foto de perfil.')
+        }
 
-        if (!myUrlPhoto || !(await isImageUrl(myUrlPhoto)))
-            return await sendMessage(groupId, '⚠️ Por favor, forneça um link válido para a foto, só é permitido extensões .jpeg, .jpg, .png.' )
+        let mediaResult
+        try {
+            mediaResult = await downloadImageMedia(imageMetadata)
+        } catch (error) {
+            console.error('Erro no download da imagem de perfil:', error)
+            return await sendMessage(groupId, '⚠️ Não foi possível baixar essa imagem. Tente novamente com uma imagem PNG/JPG/JPEG.')
+        }
 
-        console.log('ENTROU NO FOTO 3')
+        const { imageBuffer, mimeType } = mediaResult
+        await currentPlayer.setProfileImage(imageBuffer)
 
-        await currentPlayer.setFotoUrl(myUrlPhoto)
+        const base64ProfileImage = imageBufferToBase64DataUri(imageBuffer, mimeType)
 
-        return sendImageWithCaption(
+        return await sendImageWithCaption(
             groupId,
-            myUrlPhoto,
+            base64ProfileImage,
             `✅ Foto de jogador atualizada com sucesso, *${currentPlayer.getName()}*!`
         )
     }
