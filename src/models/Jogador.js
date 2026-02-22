@@ -11,7 +11,6 @@ class Jogador {
         this.pokeCoins = pokeCoins
         this.diaryLogin = diaryLogin
         this.items = items
-        this.pokemons = []
     }
 
     getName() {
@@ -38,10 +37,6 @@ class Jogador {
         const pool = await connectToDatabase()
         await pool.query(queries.UPDATE_PLAYER_PROFILE_IMAGE, [imageBuffer, this.id])
         this.profileImage = imageBuffer
-    }
-
-    totalPokemonsOwned() {
-        return this.pokemons.length
     }
 
     getPokebola() {
@@ -114,6 +109,13 @@ class Jogador {
         const res = await pool.query(queries.GET_PLAYER_POKEMON_BY_NAME, [this.id, pokemonName])
 
         return res.rowCount > 0 ? res.rows[0] : null
+    }
+
+    async getPokedex() {
+        const pool = await connectToDatabase()
+        const res = await pool.query(queries.GET_PLAYER_POKEDEX, [this.id])
+
+        return res.rows
     }
 
     async capturePokemon(instanciaPokemon) {

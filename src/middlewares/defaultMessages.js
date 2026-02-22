@@ -1,6 +1,8 @@
 import { POKEBALL_PRICE, POTION_PRICE, REVIVE_PRICE, RARE_CANDY_PRICE, FULL_RESTORE_PRICE, CHANGE_NAME_PRICE } from '../pokemon/config/prices.js'
 
-export function perfilMessage(currentPlayer) {
+export async function perfilMessage(currentPlayer) {
+    const pokedex = await currentPlayer.getPokedex()
+
     return `\n⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘\n\n` +
 
         `˗ˏˋ *「 ✦ ${currentPlayer.getName()} ✦ 」* ˎˊ˗\n\n` +
@@ -12,7 +14,7 @@ export function perfilMessage(currentPlayer) {
         `∘₊✧──────✧₊∘\n\n` +
 
         `🎒 𝕀𝕟𝕧𝕖𝕟𝕥𝕒𝕣𝕚𝕠 🎒\n` +
-        `🪼 _Pokemons_: ${currentPlayer.totalPokemonsOwned()}\n` +
+        `🪼 _Pokemons_: ${pokedex.length}\n` +
         `🔮 _Pokebolas_: ${currentPlayer.getPokebola()}\n` +
         `🧪 _Poções_: ${currentPlayer.getPocao()}\n` +
         `🧬 _Revives_: ${currentPlayer.getReviver()}\n` +

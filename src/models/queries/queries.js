@@ -96,3 +96,10 @@ WHERE "jogadorId" = $1
   AND LOWER(name) = LOWER($2)
 LIMIT 1
 `
+
+export const GET_PLAYER_POKEDEX = `
+SELECT id, "specieId", name, level, exp, "currentHp", types, "evolutionStage", "nextEvolutionLevel", "caughtDate"
+FROM "Pokemon"
+WHERE "jogadorId" = $1
+ORDER BY "caughtDate" DESC
+`
