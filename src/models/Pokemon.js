@@ -1,3 +1,5 @@
+import { randomNumber } from '../utils/commonFunctions.js'
+
 class Pokemon {
     constructor(
         id,
@@ -37,6 +39,14 @@ class Pokemon {
 
     getMoves() {
         return this.moves
+    }
+
+    async escapePokemonChance() {
+        const chance = await randomNumber(1, 100)
+        if (chance <= 25)
+            return true
+
+        return false
     }
 }
 

@@ -9,7 +9,7 @@ import { mapBaseStats } from "./mappers/baseStatsMapper.js"
 import { mapIv } from "./mappers/ivMapper.js"
 import { mapAverageStats } from "./mappers/averageMapper.js"
 
-const currentPokemonSpawned = {
+export const currentPokemonSpawned = {
     number: null,
     alreadyCaught: false
 }
@@ -56,4 +56,6 @@ export async function pokemonSpawn(chatId) {
     currentPokemonSpawned.number = randomId
 
     console.log(`Pokémon ID: ${randomId}\nNome: ${await getPokemonNameById(randomId)}`)
+
+    console.log('currentPokemonSpawned: ', currentPokemonSpawned)
 }

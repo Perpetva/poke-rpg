@@ -1,5 +1,6 @@
-import { sendMessage } from '../../services/wapi.js'
+import { sendImageWithCaption, sendMessage } from '../../services/wapi.js'
 import Jogador from '../../models/Jogador.js'
+import { REGISTRATION_IMAGE } from '../../pokemon/config/config.js'
 
 export default {
     name: 'registrar',
@@ -24,7 +25,13 @@ export default {
                 phone: userPhone
             })
 
-            return await sendMessage(groupId, `✅ Registro concluído! Bem-vindo, *${newPlayer.getName()}*! Você começou com *${newPlayer.getPokebola()}* Pokébolas.`)
+            const message = `✅ Registro concluído! Bem-vindo, *${newPlayer.getName()}*! Use !perfil para ver seu perfil de jogador!`
+
+            return await sendImageWithCaption(
+                groupId,
+                REGISTRATION_IMAGE,
+                message
+            )
 
         } catch (e) {
             console.error('Erro registrar.js: ', e)
