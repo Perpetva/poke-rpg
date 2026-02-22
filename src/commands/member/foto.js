@@ -1,4 +1,8 @@
-import { sendMessage, sendImageWithCaption, downloadImageMedia, imageBufferToBase64DataUri, extractImageMessageMetadata } from "../../services/wapi.js"
+import { sendMessage, 
+    sendImageWithCaption, 
+    downloadImageMedia, 
+    imageBufferToBase64DataUri } from "../../services/wapi.js"
+import { extractImageMessageMetadata } from "../../utils/commonFunctions.js"
 import Jogador from "../../models/Jogador.js"
 
 export default {
@@ -13,7 +17,7 @@ export default {
         const imageMetadata = extractImageMessageMetadata(objMessage)
         if (!imageMetadata) {
             return await sendMessage(groupId, '⚠️ Envie uma imagem com a legenda _!foto_ para atualizar sua foto de perfil.')
-        }
+        }   
 
         let mediaResult
         try {

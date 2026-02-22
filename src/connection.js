@@ -17,10 +17,10 @@ export async function connection() {
     })
 
     app.post("/message", (req, res) => {
-        console.log("📩 Mensagem recebida:", req.body)
+        // console.log("📩 Mensagem recebida:", req.body)
         commandHandler(req.body)
         res.sendStatus(200)
-    })
+    }) 
 
     app.get("/", (req, res) => {
         res.send("Servidor Express rodando!")
