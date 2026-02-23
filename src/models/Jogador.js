@@ -39,6 +39,19 @@ class Jogador {
         this.profileImage = imageBuffer
     }
 
+    async setPokeCoins(amount) {
+        const parsedAmount = Number(amount)
+        if (!Number.isFinite(parsedAmount)) return null
+
+        const sanitizedAmount = Math.max(0, Math.floor(parsedAmount))
+
+        const pool = await connectToDatabase()
+        await pool.query(queries.UPDATE_PLAYER_POKE_COINS, [sanitizedAmount, this.id])
+        this.pokeCoins = sanitizedAmount
+
+        return this.pokeCoins
+    }
+
     getPokebola() {
         return this.items.getItemCount('pokeBalls')
     }
@@ -72,14 +85,19 @@ class Jogador {
             pocoes: 'potions',
             revive: 'revives',
             revives: 'revives',
+            reviver: 'revives',
             totalcure: 'totalCures',
             totalcures: 'totalCures',
             curetotal: 'totalCures',
             curetotals: 'totalCures',
+            cura_total: 'totalCures',
+            'cura total': 'totalCures',
             rarecandy: 'rareCandies',
             rarecandies: 'rareCandies',
             doceraro: 'rareCandies',
-            docesaros: 'rareCandies'
+            docesaros: 'rareCandies',
+            doce_raro: 'rareCandies',
+            'doce raro': 'rareCandies'
         }
 
         const mappedColumnName = itemNameMap[normalizedItemName]

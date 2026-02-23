@@ -9,11 +9,11 @@ export default {
         const currentPlayer = await Jogador.getPlayerById(userPhone)
         
         if (!currentPlayer)
-            return await sendMessage(groupId, '⚠️ Você precisa se registrar primeiro usando o comando !registrar <nickname>')
+            return await sendMessage(groupId, '⚠️ Você precisa se registrar primeiro usando o comando !registrar *seu nick*')
 
         const profileImageBuffer = currentPlayer.getProfileImage() 
         const profileMessage = await perfilMessage(currentPlayer)
-
+        
         if (!profileImageBuffer) {
             return await sendMessage(groupId, `${profileMessage}\n\n⚠️ Você ainda não tem foto de jogador. Para adicionar, envie uma imagem com a legenda _!foto_.`)
         }
