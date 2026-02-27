@@ -17,6 +17,17 @@ class Jogador {
         return this.name
     }
 
+    async setName(newName) {
+        const formatedName = String(newName || '').trim()
+        if (!formatedName) return null
+
+        const pool = await connectToDatabase()
+        await pool.query(queries.UPDATE_PLAYER_NAME, [formatedName, this.id])
+        this.name = formatedName
+
+        return this.name
+    }
+
     getId() {
         return this.id
     }

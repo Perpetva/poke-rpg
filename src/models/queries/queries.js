@@ -40,6 +40,12 @@ SET "pokeCoins" = $1
 WHERE id = $2
 `
 
+export const UPDATE_PLAYER_NAME = `
+UPDATE "Jogador"
+SET "name" = $1
+WHERE id = $2
+`
+
 export const GET_PLAYER_ITEM_BY_ID = `
 SELECT
 	i."pokeBalls",
