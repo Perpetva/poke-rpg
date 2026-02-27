@@ -46,6 +46,17 @@ SET "name" = $1
 WHERE id = $2
 `
 
+export const UPDATE_PLAYER_DAILY_LOGIN_IF_ELIGIBLE = `
+UPDATE "Jogador"
+SET "diaryLogin" = $1
+WHERE id = $2
+	AND (
+		"diaryLogin" IS NULL
+		OR DATE("diaryLogin") < DATE($1)
+	)
+RETURNING "diaryLogin"
+`
+
 export const GET_PLAYER_ITEM_BY_ID = `
 SELECT
 	i."pokeBalls",

@@ -63,6 +63,31 @@ class Jogador {
         return this.pokeCoins
     }
 
+    canCollectDaily() {
+        const today = new Date().toISOString().split('T')[0]
+
+        if (!this.diaryLogin) return true
+
+        const parsedLastLoginDate = new Date(this.diaryLogin)
+        if (Number.isNaN(parsedLastLoginDate.getTime())) return true
+
+        const lastLogin = parsedLastLoginDate.toISOString().split('T')[0]
+
+        return lastLogin !== today
+    }
+
+    async refreshDailyLogin(loginDate = new Date().toISOString().split('T')[0]) {
+        const pool = await connectToDatabase()
+        const res = await pool.query(queries.UPDATE_PLAYER_DAILY_LOGIN_IF_ELIGIBLE, [loginDate, this.id])
+
+        if (res.rowCount === 0) {
+            return false
+        }
+
+        this.diaryLogin = res.rows[0].diaryLogin
+        return true
+    }
+
     getPokebola() {
         return this.items.getItemCount('pokeBalls')
     }
