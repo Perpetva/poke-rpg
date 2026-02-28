@@ -24,6 +24,9 @@ export default {
         const typedPokemonName = args[0] ? args[0].toLowerCase() : ''
 
         if (currentPokemonSpawned.alreadyCaught === true) {
+            
+
+
             return await sendMessage(groupId, `${typedPokemonName === currentPokemon.name.toLowerCase() ? `O pokemon ${currentPokemon.name} já foi pego ou morto.` :
                 `O pokemon ${currentPokemon.name} já foi pego e além disso você digitou o nome errado!`
                 }`

@@ -7,7 +7,7 @@ export default {
     async execute(objMessage, args, userPhone, groupId) {
         const currentPlayer = await Jogador.getPlayerById(userPhone)
 
-        const message = `Olá _${currentPlayer.getName()}_!\n\nPara vender pokémons use "!vender-pokemon *Nome do pokémon*\nPara vender itens use "!vender-item *Nome do item*"\n\nVeja mais comandos em !comandos`
-        sendMessage(groupId, message)
+        const message = `Para vender pokémons use "!vender-pokemon *Nome do pokémon*\nPara vender itens use "!vender-item *Nome do item*"\n\nVeja mais comandos em !comandos\n\n> ${currentPlayer.getName()}`
+        return await sendMessage(groupId, message)
     }
 }
