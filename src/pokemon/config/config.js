@@ -1,4 +1,4 @@
-export const TOTAL_POKEMONS = 905
+export const TOTAL_POKEMONS = 386
 
 export const POKESTORE_IMAGE = 'https://cdnb.artstation.com/p/assets/images/images/071/769/529/large/jonathan-dulcahn-dodd-mart.jpg?1705921520'
 
