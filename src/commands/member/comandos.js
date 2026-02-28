@@ -7,6 +7,9 @@ export default {
     async execute(objMessage, args, userPhone, groupId) {
         const currentPlayer = await Jogador.getPlayerById(userPhone)
 
+        if (!currentPlayer)
+            return await sendMessage(groupId, '⚠️ Você precisa se registrar primeiro usando o comando !registrar *seu nick*')
+
         const commandsList = [
             '!registrar <nickname> - Registra um novo jogador com o nickname fornecido.',
             '!loja - Mostra a loja de itens disponíveis.',

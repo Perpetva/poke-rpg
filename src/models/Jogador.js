@@ -2,6 +2,32 @@ import { connectToDatabase } from '../database/connectionDatabase.js'
 import * as queries from './queries/queries.js'
 import Item from './Item.js'
 
+const ITEM_NAME_MAP = {
+    pokeball: 'pokeBalls',
+    pokeballs: 'pokeBalls',
+    pokebola: 'pokeBalls',
+    pokebolas: 'pokeBalls',
+    potion: 'potions',
+    potions: 'potions',
+    pocao: 'potions',
+    pocoes: 'potions',
+    revive: 'revives',
+    revives: 'revives',
+    reviver: 'revives',
+    totalcure: 'totalCures',
+    totalcures: 'totalCures',
+    curetotal: 'totalCures',
+    curetotals: 'totalCures',
+    cura_total: 'totalCures',
+    'cura total': 'totalCures',
+    rarecandy: 'rareCandies',
+    rarecandies: 'rareCandies',
+    doceraro: 'rareCandies',
+    docesaros: 'rareCandies',
+    doce_raro: 'rareCandies',
+    'doce raro': 'rareCandies'
+}
+
 class Jogador {
     constructor(id, name, phone, profileImage = null, pokeCoins = 500, diaryLogin = null, items = new Item()) {
         this.id = id
@@ -108,35 +134,21 @@ class Jogador {
         return this.items.getItemCount('rareCandies')
     }
 
+    hasItem(itemName, minQuantity = 1) {
+        const normalizedItemName = String(itemName || '').toLowerCase().trim()
+        const mappedColumnName = ITEM_NAME_MAP[normalizedItemName]
+        if (!mappedColumnName) return false
+
+        const requiredQuantity = Number(minQuantity)
+        if (!Number.isFinite(requiredQuantity) || requiredQuantity <= 0) return false
+
+        const currentQuantity = Number(this.items.getItemCount(mappedColumnName) ?? 0)
+        return currentQuantity >= requiredQuantity
+    }
+
     async updateItem(itemName, quantity) {
         const normalizedItemName = String(itemName || '').toLowerCase().trim()
-        const itemNameMap = {
-            pokeball: 'pokeBalls',
-            pokeballs: 'pokeBalls',
-            pokebola: 'pokeBalls',
-            pokebolas: 'pokeBalls',
-            potion: 'potions',
-            potions: 'potions',
-            pocao: 'potions',
-            pocoes: 'potions',
-            revive: 'revives',
-            revives: 'revives',
-            reviver: 'revives',
-            totalcure: 'totalCures',
-            totalcures: 'totalCures',
-            curetotal: 'totalCures',
-            curetotals: 'totalCures',
-            cura_total: 'totalCures',
-            'cura total': 'totalCures',
-            rarecandy: 'rareCandies',
-            rarecandies: 'rareCandies',
-            doceraro: 'rareCandies',
-            docesaros: 'rareCandies',
-            doce_raro: 'rareCandies',
-            'doce raro': 'rareCandies'
-        }
-
-        const mappedColumnName = itemNameMap[normalizedItemName]
+        const mappedColumnName = ITEM_NAME_MAP[normalizedItemName]
         if (!mappedColumnName) return null
 
         const parsedQuantity = Number(quantity)
