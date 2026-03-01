@@ -1,6 +1,7 @@
 import { connectToDatabase } from '../database/connectionDatabase.js'
 import * as queries from './queries/queries.js'
 import Item from './Item.js'
+import Pokemon from './Pokemon.js'
 
 const ITEM_NAME_MAP = {
     pokeball: 'pokeBalls',
@@ -174,7 +175,31 @@ class Jogador {
         const pool = await connectToDatabase()
         const res = await pool.query(queries.GET_PLAYER_POKEMON_BY_NAME, [this.id, pokemonName])
 
-        return res.rowCount > 0 ? res.rows[0] : null
+        if (res.rowCount === 0) return null
+
+        const pokemonRow = res.rows[0]
+
+        return new Pokemon(
+            pokemonRow.id,
+            pokemonRow.specieId,
+            pokemonRow.name,
+            pokemonRow.exp,
+            pokemonRow.currentHp,
+            pokemonRow.types,
+            pokemonRow.evolutionStage,
+            pokemonRow.nextEvolutionLevel,
+            {
+                hp: Number(pokemonRow.ivHp ?? 0),
+                speed: Number(pokemonRow.ivSpeed ?? 0),
+                attack: Number(pokemonRow.ivAttack ?? 0),
+                defense: Number(pokemonRow.ivDefense ?? 0),
+                specialAttack: Number(pokemonRow.ivSpecialAttack ?? 0),
+                specialDefense: Number(pokemonRow.ivSpecialDefense ?? 0)
+            },
+            null,
+            [],
+            pokemonRow.jogadorId ?? this.id
+        )
     }
 
     async getPokedex() {

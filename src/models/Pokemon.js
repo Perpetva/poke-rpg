@@ -1,4 +1,6 @@
 import { randomNumber } from '../utils/commonFunctions.js'
+import { connectToDatabase } from '../database/connectionDatabase.js'
+import * as queries from './queries/queries.js'
 
 class Pokemon {
     constructor(
@@ -39,6 +41,42 @@ class Pokemon {
 
     getMoves() {
         return this.moves
+    }
+
+    getName() {
+        return this.name
+    }
+
+    getPrice() {
+        const ivObject = this.iv || {}
+        let ivSum = 0
+
+        for (const ivStatName in ivObject) {
+            if (Object.prototype.hasOwnProperty.call(ivObject, ivStatName)) {
+                const ivStatValue = Number(ivObject[ivStatName] ?? 0)
+                if (Number.isFinite(ivStatValue)) {
+                    ivSum += ivStatValue
+                }
+            }
+        }
+
+        const parsedExp = Number(this.exp ?? 0)
+        const safeExp = Number.isFinite(parsedExp) ? Math.max(0, parsedExp) : 0
+        const level = Math.max(1, Math.round(Math.cbrt(safeExp)))
+
+        if (level <= 1) return Math.max(1, Math.ceil(ivSum))
+
+        const sellPrice = Math.ceil(ivSum * (level / (level - 1)))
+        return Math.max(1, sellPrice)
+    }
+
+    async deletePokemon() {
+        if (!this.id) return false
+
+        const pool = await connectToDatabase()
+        const res = await pool.query(queries.DELETE_POKEMON_BY_ID, [this.id])
+
+        return res.rowCount > 0
     }
 
     async escapePokemonChance() {

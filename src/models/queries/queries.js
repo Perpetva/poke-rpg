@@ -113,11 +113,33 @@ VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 `
 
 export const GET_PLAYER_POKEMON_BY_NAME = `
-SELECT id, name
-FROM "Pokemon"
-WHERE "jogadorId" = $1
-  AND LOWER(name) = LOWER($2)
+SELECT
+	p.id,
+	p."specieId",
+	p.name,
+	p.exp,
+	p."currentHp",
+	p.types,
+	p."evolutionStage",
+	p."nextEvolutionLevel",
+	p."jogadorId",
+	iv.hp AS "ivHp",
+	iv.speed AS "ivSpeed",
+	iv.attack AS "ivAttack",
+	iv.defense AS "ivDefense",
+	iv."specialAttack" AS "ivSpecialAttack",
+	iv."specialDefense" AS "ivSpecialDefense"
+FROM "Pokemon" p
+LEFT JOIN "Iv" iv ON iv.id = p."ivId"
+WHERE p."jogadorId" = $1
+  AND LOWER(p.name) = LOWER($2)
 LIMIT 1
+`
+
+export const DELETE_POKEMON_BY_ID = `
+DELETE FROM "Pokemon"
+WHERE id = $1
+RETURNING id
 `
 
 export const GET_PLAYER_POKEDEX = `
