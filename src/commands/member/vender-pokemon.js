@@ -8,7 +8,6 @@ export default {
         const currentPlayer = await Jogador.getPlayerById(userPhone)
         const pokemonName = args[0]?.trim()
         
-
         if (!currentPlayer)
             return await sendMessage(groupId, '⚠️ Você precisa se registrar primeiro usando o comando !registrar *seu nick*')
 

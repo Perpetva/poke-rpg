@@ -2,6 +2,7 @@ import { connectToDatabase } from '../database/connectionDatabase.js'
 import * as queries from './queries/queries.js'
 import Item from './Item.js'
 import Pokemon from './Pokemon.js'
+import { checkInsignia } from '../pokemon/badges/badges.js'
 
 const ITEM_NAME_MAP = {
     pokeball: 'pokeBalls',
@@ -325,6 +326,30 @@ class Jogador {
             throw error
         } finally {
             client.release()
+        }
+    }
+
+    async insignia() {
+        const countTypes = {}
+        const currentPokemons = await this.getPokedex();
+
+        for (const pokemon of currentPokemons) {
+            for (const type of pokemon.types) {
+                countTypes[type] = (countTypes[type] || 0) + 1;
+            }
+        }
+
+        const mostCommonType = Object.entries(countTypes).reduce((moreCommon, current) => {
+            return current[1] > moreCommon[1] ? current : moreCommon;
+        });
+
+        const { urlBadge, typeName } = checkInsignia(mostCommonType[0])
+        const occurrence = mostCommonType[1];
+
+        return {
+            urlBadge,
+            occurrence,
+            typeName
         }
     }
 }

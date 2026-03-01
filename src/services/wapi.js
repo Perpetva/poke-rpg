@@ -54,13 +54,44 @@ export async function sendMessage(phone, message) {
     }
 }
 
-export async function sendSticker(phone, randomId) {
+export async function sendSticker(phone, randomId) { // arrumar para sendPokemonSticker
     if (!phone || !randomId) {
         console.error('sendSticker: phone ou stickerId está vazio!')
         return
     }
 
     const sticker = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${randomId}.png`
+
+    const instanceId = process.env.WAPI_INSTANCE_ID
+    const token = process.env.WAPI_TOKEN
+
+    const url = `https://api.w-api.app/v1/message/send-sticker?instanceId=${instanceId}`
+
+    try {
+        const response = await axios.post(
+            url,
+            { phone, sticker },
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                timeout: 10000
+            }
+        )
+
+    } catch (e) {
+        console.error("Erro ao enviar sticker via WAPI:", e)
+    }
+}
+
+export async function sendStickerBadge(phone, urlSticker) { // mudar para uma func sendSticker default
+    if (!phone || !urlSticker) {
+        console.error('sendStickerBadge: phone ou stickerUrl está vazio!')
+        return
+    }
+
+    const sticker = urlSticker
 
     const instanceId = process.env.WAPI_INSTANCE_ID
     const token = process.env.WAPI_TOKEN
