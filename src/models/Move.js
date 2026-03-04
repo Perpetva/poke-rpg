@@ -8,6 +8,34 @@ class Move {
         this.moveCategory = moveCategory
         this.currentPp = maxPp
     }
+
+    getName() {
+        return this.name
+    }
+
+    getType() {
+        return this.type
+    }
+
+    getMaxPp() {
+        return this.maxPp
+    }
+
+    getCurrentPp() {
+        return this.currentPp
+    }
+
+    getPower() {
+        return this.power
+    }
+
+    getAccuracy() {
+        return this.accuracy
+    }
+
+    getMoveCategory() {
+        return this.moveCategory
+    }
 }
 
 export default Move

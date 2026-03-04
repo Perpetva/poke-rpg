@@ -1,6 +1,7 @@
 import { connectToDatabase } from '../database/connectionDatabase.js'
 import * as queries from './queries/queries.js'
 import Item from './Item.js'
+import Move from './Move.js'
 import Pokemon from './Pokemon.js'
 import { checkInsignia } from '../pokemon/badges/badges.js'
 
@@ -179,6 +180,20 @@ class Jogador {
         if (res.rowCount === 0) return null
 
         const pokemonRow = res.rows[0]
+        const movesRes = await pool.query(queries.GET_POKEMON_MOVES_BY_POKEMON_ID, [pokemonRow.id])
+        const pokemonMoves = movesRes.rows.map(moveRow => {
+            const move = new Move(
+                moveRow.name,
+                moveRow.type,
+                Number(moveRow.maxPp ?? 0),
+                Number(moveRow.power ?? 0),
+                Number(moveRow.accuracy ?? 100),
+                moveRow.moveCategory
+            )
+
+            move.currentPp = Number(moveRow.currentPp ?? move.getMaxPp())
+            return move
+        })
 
         return new Pokemon(
             pokemonRow.id,
@@ -198,7 +213,7 @@ class Jogador {
                 specialDefense: Number(pokemonRow.ivSpecialDefense ?? 0)
             },
             null,
-            [],
+            pokemonMoves,
             pokemonRow.jogadorId ?? this.id
         )
     }

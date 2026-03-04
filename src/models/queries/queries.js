@@ -136,6 +136,19 @@ WHERE p."jogadorId" = $1
 LIMIT 1
 `
 
+export const GET_POKEMON_MOVES_BY_POKEMON_ID = `
+SELECT
+	m.name,
+	m.type,
+	m."maxPp",
+	m."currentPp",
+	m.power,
+	m.accuracy,
+	m."moveCategory"
+FROM "Move" m
+WHERE m."pokemonId" = $1
+`
+
 export const DELETE_POKEMON_BY_ID = `
 DELETE FROM "Pokemon"
 WHERE id = $1
