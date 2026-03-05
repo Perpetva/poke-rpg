@@ -4,6 +4,7 @@ import { isOnCooldown, setCooldown, getRemainingTime } from '../../pokemon/coold
 import Jogador from '../../models/Jogador.js'
 import { sendMessage } from '../../services/wapi.js'
 import { getHeightAndWeightById, getPokemonTypesById, translatePokemonTypes, verifyGenerationById } from '../../pokemon/commonPokemonFunctions.js'
+import { send } from 'process'
 
 export default {
     name: 'pegar',
@@ -24,13 +25,10 @@ export default {
         const typedPokemonName = args[0] ? args[0].toLowerCase() : ''
 
         if (currentPokemonSpawned.alreadyCaught === true) {
-            
+            if (typedPokemonName === currentPokemon.name.toLowerCase())
+                return await sendMessage(groupId, `O pokemon ${currentPokemon.name} já foi pego ou morto.`)
 
-
-            return await sendMessage(groupId, `${typedPokemonName === currentPokemon.name.toLowerCase() ? `O pokemon ${currentPokemon.name} já foi pego ou morto.` :
-                `O pokemon ${currentPokemon.name} já foi pego e além disso você digitou o nome errado!`
-                }`
-            )
+            return await sendMessage(groupId, `O pokemon ${currentPokemon.name} já foi pego e além disso você digitou o nome errado!`)
         }
 
         if (isOnCooldown(userPhone)) {
@@ -80,5 +78,6 @@ export default {
             )
         }
 
+        return await sendMessage(groupId, `Esse não é o pokemon spawnado! 💔`)
     }
 }

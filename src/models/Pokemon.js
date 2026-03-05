@@ -47,6 +47,14 @@ class Pokemon {
         return this.name
     }
 
+    getSpecieId() {
+        return this.specieId
+    }
+
+    getCurrentHp() {
+        return this.currentHp
+    }
+
     getPrice() {
         const ivObject = this.iv || {}
         let ivSum = 0

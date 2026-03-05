@@ -13,9 +13,8 @@ export default {
         if (!currentPlayer)
             return await sendMessage(groupId, '⚠️ Você precisa se registrar primeiro usando o comando !registrar *seu nick*')
 
-        if (!pokemonName) {
+        if (!pokemonName)
             return await sendMessage(groupId, 'Por favor, forneça o nome do pokemon! Exemplo: !movimentos pikachu')
-        }
 
         const currentPokemon = await currentPlayer.getPokemonByName(pokemonName)
 
