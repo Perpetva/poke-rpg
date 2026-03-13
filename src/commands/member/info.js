@@ -19,10 +19,11 @@ export default {
         if (!currentPokemon)
             return await sendMessage(groupId, `❌ Você não possui um pokemon com o nome ${pokemonName}!`)
 
+        const specieId = currentPokemon.getSpecieId()
         const sellPrice = currentPokemon.getPrice()
-        const { height, weight } = await getHeightAndWeightById(currentPokemon.getSpecieId())
+        const { height, weight } = await getHeightAndWeightById(specieId)
         const ownerName = currentPlayer.getName()
-        const pokemonTypes = await getPokemonTypesById(currentPokemon.getSpecieId())
+        const pokemonTypes = await getPokemonTypesById(specieId)
 
         const info =
             `📘 Informações do Pokémon:\n\n` +
@@ -30,13 +31,13 @@ export default {
             //`🔢 Nível: ${currentPokemon.getLevel()}\n` +
             //`♟️ Experiência: ${currentPokemon.getExperience()}/${currentPokemon.getTotalExperience()}\n` +
             `❤️ HP: ${currentPokemon.getCurrentHp()}/${currentPokemon.getCurrentHp()}\n` + // Trocar para HP máximo quando implementar
-            `🆔 ID: ${currentPokemon.getSpecieId()}\n` +
+            `🆔 ID: ${specieId}\n` +
             `👤 Dono: ${ownerName}\n\n` +
 
             `⚡️ Tipo(s): ${translatePokemonTypes(pokemonTypes)}\n` +
             `📏 Altura: ${height} m\n` +
             `⚖️ Peso: ${weight} kg\n` +
-            `🗓️ Geração: ${verifyGenerationById(currentPokemon.getSpecieId())}\n\n` +
+            `🗓️ Geração: ${verifyGenerationById(specieId)}\n\n` +
             `💸 Preço de venda: ${sellPrice} PokéCoins\n\n` +
 
             `🌟 IVs:\n` +
@@ -48,6 +49,6 @@ export default {
             `💨 Velocidade: ${currentPokemon.iv.speed}\n`
 
         await sendMessage(groupId, info)
-        await sendSticker(groupId, currentPokemon.getSpecieId())
+        await sendSticker(groupId, specieId)
     }
 }

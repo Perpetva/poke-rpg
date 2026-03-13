@@ -94,6 +94,8 @@ class Pokemon {
 
         return false
     }
+
+    
 }
 
 export default Pokemon
