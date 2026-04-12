@@ -1,6 +1,7 @@
 import { randomNumber } from '../utils/commonFunctions.js'
 import { connectToDatabase } from '../database/connectionDatabase.js'
 import * as queries from './queries/queries.js'
+import { XP_MAX, NIVEL_MAX, NIVEL_MIN } from "../pokemon/config/config.js"
 
 class Pokemon {
     constructor(
@@ -95,7 +96,53 @@ class Pokemon {
         return false
     }
 
-    
+    getLevel() {
+        let xp = this.exp
+
+        if (xp < 0) xp = 0
+        if (xp > XP_MAX) xp = XP_MAX
+
+        let nivel = NIVEL_MIN
+
+        for (let i = NIVEL_MIN; i <= NIVEL_MAX; i++) {
+            const xpNecessaria = Math.floor((Math.pow(i, 3) / Math.pow(NIVEL_MAX, 3)) * XP_MAX)
+
+            if (xp >= xpNecessaria) {
+                nivel = i
+
+            } else {
+                break
+            }
+        }
+
+        return nivel
+    }
+
+    getCurrentExperience() {
+        let xp = this.exp
+
+        const nivel = this.getLevel()
+        const xpInicioNivel = Math.floor((Math.pow(nivel, 3) / Math.pow(NIVEL_MAX, 3)) * XP_MAX)
+
+        return xp - xpInicioNivel
+    }
+
+    getTotalLvlExperience() {
+        const nivel = this.getLevel()
+
+        if (nivel < NIVEL_MIN) nivel = NIVEL_MIN
+        if (nivel >= NIVEL_MAX) return 0
+
+        const xpAtual = Math.floor(
+            (Math.pow(nivel, 3) / Math.pow(NIVEL_MAX, 3)) * XP_MAX
+        )
+
+        const xpProximo = Math.floor(
+            (Math.pow(nivel + 1, 3) / Math.pow(NIVEL_MAX, 3)) * XP_MAX
+        )
+
+        return xpProximo - xpAtual
+    }
 }
 
 export default Pokemon

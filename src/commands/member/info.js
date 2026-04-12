@@ -28,8 +28,8 @@ export default {
         const info =
             `📘 Informações do Pokémon:\n\n` +
             `🧬 Nome: ${currentPokemon.getName()}\n` +
-            //`🔢 Nível: ${currentPokemon.getLevel()}\n` +
-            //`♟️ Experiência: ${currentPokemon.getExperience()}/${currentPokemon.getTotalExperience()}\n` +
+            `🔢 Nível: ${currentPokemon.getLevel()}\n` +
+            `♟️ Experiência: ${currentPokemon.getCurrentExperience()}/${currentPokemon.getTotalLvlExperience()}\n` +
             `❤️ HP: ${currentPokemon.getCurrentHp()}/${currentPokemon.getCurrentHp()}\n` + // Trocar para HP máximo quando implementar
             `🆔 ID: ${specieId}\n` +
             `👤 Dono: ${ownerName}\n\n` +

@@ -29,7 +29,7 @@ export async function pokemonSpawn(chatId) {
 
     const types = chosenPokemonData.types.map(t => t.type.name)
 
-    const exp = await randomNumber(15, 175)
+    const exp = await randomNumber(20, 550) // sendo - lvl8 ≈ 512xp
     const moves = await getValidMovesFromPokeAPI(especie_id, 4)
 
     const currentPokemon = new Pokemon(
