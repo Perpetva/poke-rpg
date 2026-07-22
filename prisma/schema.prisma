@@ -14,8 +14,9 @@ model Jogador {
   profileImage Bytes?
   pokeCoins  Int       @default(500)
   diaryLogin DateTime?
-  items      Json?
   pokemons   Pokemon[]
+  partnerPokemonId Int? @unique
+  partnerPokemon   Pokemon? @relation("JogadorPartnerPokemon", fields: [partnerPokemonId], references: [id])
 
   Item Item[]
 }
@@ -40,6 +41,8 @@ model Pokemon {
 
   baseStatsId Int?       @unique
   baseStats   BaseStats? @relation(fields: [baseStatsId], references: [id])
+
+  partnerOf Jogador? @relation("JogadorPartnerPokemon")
 
   moves Move[]
 }

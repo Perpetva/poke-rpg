@@ -1,5 +1,6 @@
 import axios from "axios"
 import dotenv from "dotenv"
+import pokemons from "../../assets/pokemons_webp_base64.json" with { type: "json" }
 dotenv.config()
 
 const SUPPORTED_IMAGE_MIME_TYPES = new Set(['image/png', 'image/jpeg', 'image/jpg'])
@@ -60,7 +61,7 @@ export async function sendSticker(phone, randomId) { // arrumar para sendPokemon
         return
     }
 
-    const sticker = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${randomId}.png`
+    const sticker = `data:image/png;base64,${pokemons[`poke_${randomId}`]}`
 
     const instanceId = process.env.WAPI_INSTANCE_ID
     const token = process.env.WAPI_TOKEN

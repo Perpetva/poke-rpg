@@ -6,6 +6,7 @@ SELECT
 	j."profileImage",
 	j."pokeCoins",
 	j."diaryLogin",
+	j."partnerPokemonId",
 	i."pokeBalls",
 	i."potions",
 	i."revives",
@@ -44,6 +45,13 @@ export const UPDATE_PLAYER_NAME = `
 UPDATE "Jogador"
 SET "name" = $1
 WHERE id = $2
+`
+
+export const UPDATE_PLAYER_PARTNER_POKEMON = `
+UPDATE "Jogador"
+SET "partnerPokemonId" = $1
+WHERE id = $2
+RETURNING "partnerPokemonId"
 `
 
 export const UPDATE_PLAYER_DAILY_LOGIN_IF_ELIGIBLE = `

@@ -4,7 +4,6 @@ import { isOnCooldown, setCooldown, getRemainingTime } from '../../pokemon/coold
 import Jogador from '../../models/Jogador.js'
 import { sendMessage } from '../../services/wapi.js'
 import { getHeightAndWeightById, getPokemonTypesById, translatePokemonTypes, verifyGenerationById } from '../../pokemon/commonPokemonFunctions.js'
-import { send } from 'process'
 
 export default {
     name: 'pegar',
@@ -72,7 +71,7 @@ export default {
                 `_Altura:_ ${height ?? 'desconhecida'}m\n` +
                 `_Peso:_ ${weight ?? 'desconhecido'}kg\n` +
                 `_Geração:_ ${generation}\n\n` +
-                `Você pode ver mais detalhes do seu pokemon com o comando !poke ${currentPokemon.name}.\n` +
+                `Você pode ver mais detalhes do seu pokemon com o comando !info ${currentPokemon.name}.\n` +
 
                 `_Você tem *${currentPlayer.getPokebola()}* pokebolas restantes._`
             )

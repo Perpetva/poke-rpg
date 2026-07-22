@@ -25,9 +25,9 @@ export default {
             '!atacar *nome do seu pokémon* *movimento* - Ataca o Pokémon spawnado com o movimento especificado.',
             '!reviver *nome do pokémon* - Revive um Pokémon desmaiado usando um item de reanimação.',
             '!pegar *nome do pokémon* - Tenta capturar o Pokémon spawnado.',
-            '!insignia *nome do pokémon* - Mostra a insígnia do jogador.',
-            '!pegar *nome do pokémon* - Tenta capturar o Pokémon spawnado.',
-            '!diario - Coleta a recompensa diária.'
+            '!insignia - Mostra a insígnia do jogador.',
+            '!diario - Coleta a recompensa diária.',
+            '!parceiro *nome do pokémon* - Define o Pokémon escolhido como parceiro.',
         ]
 
         const formatedCommands = commandsList.map(command => `- ${command}`).join('\n\n')

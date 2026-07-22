@@ -32,7 +32,7 @@ const ITEM_NAME_MAP = {
 }
 
 class Jogador {
-    constructor(id, name, phone, profileImage = null, pokeCoins = 500, diaryLogin = null, items = new Item()) {
+    constructor(id, name, phone, profileImage = null, pokeCoins = 500, diaryLogin = null, items = new Item(), partnerPokemonId = null) {
         this.id = id
         this.name = name
         this.phone = phone
@@ -40,6 +40,7 @@ class Jogador {
         this.pokeCoins = pokeCoins
         this.diaryLogin = diaryLogin
         this.items = items
+        this.partnerPokemonId = partnerPokemonId
     }
 
     getName() {
@@ -73,6 +74,10 @@ class Jogador {
         return this.profileImage
     }
 
+    getPartnerPokemonId() {
+        return this.partnerPokemonId
+    }
+
     async setProfileImage(imageBuffer) {
         const pool = await connectToDatabase()
         await pool.query(queries.UPDATE_PLAYER_PROFILE_IMAGE, [imageBuffer, this.id])
@@ -90,6 +95,19 @@ class Jogador {
         this.pokeCoins = sanitizedAmount
 
         return this.pokeCoins
+    }
+
+    async setPartnerPokemonId(pokemonId) {
+        const parsedPokemonId = Number(pokemonId)
+        if (!Number.isInteger(parsedPokemonId) || parsedPokemonId <= 0) return null
+
+        const pool = await connectToDatabase()
+        const res = await pool.query(queries.UPDATE_PLAYER_PARTNER_POKEMON, [parsedPokemonId, this.id])
+
+        if (res.rowCount === 0) return null
+
+        this.partnerPokemonId = res.rows[0].partnerPokemonId ?? null
+        return this.partnerPokemonId
     }
 
     canCollectDaily() {
@@ -316,7 +334,8 @@ class Jogador {
             row.profileImage ?? null,
             row.pokeCoins ?? 500,
             row.diaryLogin ?? null,
-            items
+            items,
+            row.partnerPokemonId ?? null
         )
     }
 
