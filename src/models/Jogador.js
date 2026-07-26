@@ -74,6 +74,10 @@ class Jogador {
         return this.profileImage
     }
 
+    getPartnerPokemonId() {
+        return this.partnerPokemonId
+    }
+
     async setProfileImage(imageBuffer) {
         const pool = await connectToDatabase()
         await pool.query(queries.UPDATE_PLAYER_PROFILE_IMAGE, [imageBuffer, this.id])
@@ -227,7 +231,14 @@ class Jogador {
                 specialAttack: Number(pokemonRow.ivSpecialAttack ?? 0),
                 specialDefense: Number(pokemonRow.ivSpecialDefense ?? 0)
             },
-            null,
+            {
+                hp: Number(pokemonRow.baseHp ?? 0),
+                speed: Number(pokemonRow.baseSpeed ?? 0),
+                attack: Number(pokemonRow.baseAttack ?? 0),
+                defense: Number(pokemonRow.baseDefense ?? 0),
+                specialAttack: Number(pokemonRow.baseSpecialAttack ?? 0),
+                specialDefense: Number(pokemonRow.baseSpecialDefense ?? 0)
+            },
             pokemonMoves,
             pokemonRow.jogadorId ?? this.id
         )
@@ -275,7 +286,14 @@ class Jogador {
                 specialAttack: Number(pokemonRow.ivSpecialAttack ?? 0),
                 specialDefense: Number(pokemonRow.ivSpecialDefense ?? 0)
             },
-            null,
+            {
+                hp: Number(pokemonRow.baseHp ?? 0),
+                speed: Number(pokemonRow.baseSpeed ?? 0),
+                attack: Number(pokemonRow.baseAttack ?? 0),
+                defense: Number(pokemonRow.baseDefense ?? 0),
+                specialAttack: Number(pokemonRow.baseSpecialAttack ?? 0),
+                specialDefense: Number(pokemonRow.baseSpecialDefense ?? 0)
+            },
             pokemonMoves,
             pokemonRow.jogadorId ?? this.id
         )

@@ -22,9 +22,10 @@ export async function pokemonSpawn(chatId) {
 
     const baseStats = mapBaseStats(chosenPokemonData)
     const iv = mapIv()
-    const { currentHp, evolutionStage, nextEvolutionLevel } = await mapAverageStats(
+    const { currentHp, maxHp, evolutionStage, nextEvolutionLevel } = await mapAverageStats(
         chosenPokemonData,
-        baseStats
+        baseStats,
+        iv
     )
 
     const types = chosenPokemonData.types.map(t => t.type.name)
@@ -45,6 +46,8 @@ export async function pokemonSpawn(chatId) {
         baseStats,
         moves
     )
+
+    currentPokemon.maxHp = maxHp
 
     setPokemonAtual(currentPokemon)
 

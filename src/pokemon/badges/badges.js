@@ -1,5 +1,3 @@
-import * as badgesUrl from './js'
-
 export function checkInsignia(tipoDominante) {
     const insigniasUrl = {
         "normal": { 
@@ -8,35 +6,35 @@ export function checkInsignia(tipoDominante) {
         },
         "fire": { 
             typeName: tipoDominante, 
-            urlBadge: "FIRE_BADGE_URL"
+            urlBadge: "FIRE_BADGE"
         },
         "water": { 
             typeName: tipoDominante, 
-            urlBadge: "WATER_BADGE_URL" 
+            urlBadge: "WATER_BADGE" 
         },
         "grass": { 
             typeName: tipoDominante, 
-            urlBadge: "GRASS_BADGE_URL"
+            urlBadge: "GRASS_BADGE"
         },
         "flying": { 
             typeName: tipoDominante, 
-            urlBadge: "FLYING_BADGE_URL"
+            urlBadge: "FLYING_BADGE"
         },
         "fighting": { 
             typeName: tipoDominante, 
-            urlBadge: "FIGHTING_BADGE_URL"
+            urlBadge: "FIGHTING_BADGE"
         },
         "poison": { 
             typeName: tipoDominante, 
-            urlBadge: "POISON_BADGE_URL"
+            urlBadge: "POISON_BADGE"
         },
         "electric": { 
             typeName: tipoDominante, 
-            urlBadge: "ELECTRIC_BADGE_URL"
+            urlBadge: "ELECTRIC_BADGE"
         },
         "ground": { 
             typeName: tipoDominante, 
-            urlBadge: "GROUND_BADGE_URL"
+            urlBadge: "GROUND_BADGE"
         },
         "rock": { 
             typeName: tipoDominante, 
@@ -44,35 +42,35 @@ export function checkInsignia(tipoDominante) {
         },
         "psychic": { 
             typeName: tipoDominante, 
-            urlBadge: "PSYCHIC_BADGE_URL" 
+            urlBadge: "PSYCHIC_BADGE" 
         },
         "ice": { 
             typeName: tipoDominante, 
-            urlBadge: "ICE_BADGE_URL" 
+            urlBadge: "ICE_BADGE" 
         },
         "bug": { 
             typeName: tipoDominante, 
-            urlBadge: "BUG_BADGE_URL" 
+            urlBadge: "BUG_BADGE" 
         },
         "ghost": { 
             typeName: tipoDominante, 
-            urlBadge: "GHOST_BADGE_URL" 
+            urlBadge: "GHOST_BADGE" 
         },
         "steel": { 
             typeName: tipoDominante, 
-            urlBadge: "STEEL_BADGE_URL"
+            urlBadge: "STEEL_BADGE"
         },
         "dragon": { 
             typeName: tipoDominante, 
-            urlBadge: "DRAGON_BADGE_URL"
+            urlBadge: "DRAGON_BADGE"
         },
         "dark": { 
             typeName: tipoDominante, 
-            urlBadge: "DARK_BADGE_URL"
+            urlBadge: "DARK_BADGE"
         },
         "fairy": { 
             typeName: tipoDominante, 
-            urlBadge: "FAIRY_BADGE_URL"
+            urlBadge: "FAIRY_BADGE"
         }
     }
 

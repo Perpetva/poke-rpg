@@ -18,7 +18,7 @@ export default {
 
         const formatedCapturedPokemons = capturedPokemons
             .map(p => `- ${firstLetterUpperCase(p.name)} `)
-            .join('\n\n');
+            .join('\n');
 
         return await sendMessage(groupId, `Olá ${currentPlayer.getName()}! Abaixo sua pokedex 👇\n\n${formatedCapturedPokemons}`)
     }

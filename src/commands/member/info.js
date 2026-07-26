@@ -30,7 +30,7 @@ export default {
             `🧬 Nome: ${currentPokemon.getName()}\n` +
             `🔢 Nível: ${currentPokemon.getLevel()}\n` +
             `♟️ Experiência: ${currentPokemon.getCurrentExperience()}/${currentPokemon.getTotalLvlExperience()}\n` +
-            `❤️ HP: ${currentPokemon.getCurrentHp()}/${currentPokemon.getCurrentHp()}\n` + // Trocar para HP máximo quando implementar
+            `❤️ HP: ${currentPokemon.getCurrentHp()}/${currentPokemon.getMaxHp()}\n` +
             `🆔 ID: ${specieId}\n` +
             `👤 Dono: ${ownerName}\n\n` +
 

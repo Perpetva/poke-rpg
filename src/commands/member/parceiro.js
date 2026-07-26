@@ -12,19 +12,14 @@ export default {
         if (!currentPlayer)
             return await sendMessage(groupId, '⚠️ Você precisa se registrar primeiro usando o comando !registrar *seu nick*')
 
-        const partnerPokemonId = await currentPlayer.partnerPokemonId
+        const partnerPokemonId = await currentPlayer.getPartnerPokemonId()
 
         if (!pokemonName) {
             if (!partnerPokemonId) {
-                return await sendMessage(groupId, '⚠️ Por favor, informe o nome do pokémon. _Exemplo: !parceiro pikachu_')
+                return await sendMessage(groupId, 'Você está sem parceiro ⚠️\n\nPara definir um parceiro, use o comando !parceiro _*nome do pokémon*_')
             }
 
             const partnerPokemon = await currentPlayer.getPokemonById(partnerPokemonId)
-
-            if (!partnerPokemon) {
-                return await sendMessage(groupId, '⚠️ Não foi possível localizar o seu pokémon parceiro atual.')
-            }
-
             return await sendMessage(groupId, `Seu parceiro atual é *${firstLetterUpperCase(partnerPokemon.name)}*.\n\nPara alterar, use o comando !parceiro _*nome do pokémon*_`)
         }
 

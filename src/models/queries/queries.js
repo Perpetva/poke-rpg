@@ -136,9 +136,16 @@ SELECT
 	iv.attack AS "ivAttack",
 	iv.defense AS "ivDefense",
 	iv."specialAttack" AS "ivSpecialAttack",
-	iv."specialDefense" AS "ivSpecialDefense"
+	iv."specialDefense" AS "ivSpecialDefense",
+	bs.hp AS "baseHp",
+	bs.speed AS "baseSpeed",
+	bs.attack AS "baseAttack",
+	bs.defense AS "baseDefense",
+	bs."specialAttack" AS "baseSpecialAttack",
+	bs."specialDefense" AS "baseSpecialDefense"
 FROM "Pokemon" p
 LEFT JOIN "Iv" iv ON iv.id = p."ivId"
+LEFT JOIN "BaseStats" bs ON bs.id = p."baseStatsId"
 WHERE p."jogadorId" = $1
   AND LOWER(p.name) = LOWER($2)
 LIMIT 1
@@ -160,9 +167,16 @@ SELECT
 	iv.attack AS "ivAttack",
 	iv.defense AS "ivDefense",
 	iv."specialAttack" AS "ivSpecialAttack",
-	iv."specialDefense" AS "ivSpecialDefense"
+	iv."specialDefense" AS "ivSpecialDefense",
+	bs.hp AS "baseHp",
+	bs.speed AS "baseSpeed",
+	bs.attack AS "baseAttack",
+	bs.defense AS "baseDefense",
+	bs."specialAttack" AS "baseSpecialAttack",
+	bs."specialDefense" AS "baseSpecialDefense"
 FROM "Pokemon" p
 LEFT JOIN "Iv" iv ON iv.id = p."ivId"
+LEFT JOIN "BaseStats" bs ON bs.id = p."baseStatsId"
 WHERE p."jogadorId" = $1
   AND p.id = $2
 LIMIT 1
@@ -179,6 +193,28 @@ SELECT
 	m."moveCategory"
 FROM "Move" m
 WHERE m."pokemonId" = $1
+`
+
+export const UPDATE_POKEMON_CURRENT_HP_BY_ID = `
+UPDATE "Pokemon"
+SET "currentHp" = $1
+WHERE id = $2
+RETURNING "currentHp"
+`
+
+export const UPDATE_POKEMON_EXP_BY_ID = `
+UPDATE "Pokemon"
+SET exp = $1
+WHERE id = $2
+RETURNING exp
+`
+
+export const UPDATE_MOVE_CURRENT_PP_BY_POKEMON_AND_NAME = `
+UPDATE "Move"
+SET "currentPp" = $1
+WHERE "pokemonId" = $2
+  AND LOWER(name) = LOWER($3)
+RETURNING "currentPp"
 `
 
 export const DELETE_POKEMON_BY_ID = `

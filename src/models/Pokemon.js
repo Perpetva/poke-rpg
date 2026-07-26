@@ -44,6 +44,116 @@ class Pokemon {
         return this.moves
     }
 
+    getBattleLevel() {
+        return this.getLevel()
+    }
+
+    calculateBattleStat(baseStatName, ivStatName = baseStatName) {
+        const baseStats = this.baseStats || {}
+        const iv = this.iv || {}
+        const level = this.getBattleLevel()
+        const baseStat = Number(baseStats[baseStatName] ?? 0)
+        const ivStat = Number(iv[ivStatName] ?? 0)
+
+        if (baseStatName === 'hp') {
+            return Math.floor((((2 * baseStat) + ivStat) * level) / 100) + level + 10
+        }
+
+        return Math.floor((((2 * baseStat) + ivStat) * level) / 100) + 5
+    }
+
+    getBattleStat(statName) {
+        return this.calculateBattleStat(statName)
+    }
+
+    getBattleHp() {
+        return this.calculateBattleStat('hp')
+    }
+
+    getMaxHp() {
+        return this.getBattleHp()
+    }
+
+    getBattleSpeed() {
+        return this.getBattleStat('speed')
+    }
+
+    getBattleAttack() {
+        return this.getBattleStat('attack')
+    }
+
+    getBattleDefense() {
+        return this.getBattleStat('defense')
+    }
+
+    getBattleSpecialAttack() {
+        return this.getBattleStat('specialAttack')
+    }
+
+    getBattleSpecialDefense() {
+        return this.getBattleStat('specialDefense')
+    }
+
+    async setCurrentHp(currentHp) {
+        const parsedCurrentHp = Number(currentHp)
+        if (!Number.isFinite(parsedCurrentHp)) return null
+
+        const sanitizedCurrentHp = Math.max(0, Math.floor(parsedCurrentHp))
+        this.currentHp = sanitizedCurrentHp
+
+        if (!this.id) return this.currentHp
+
+        const pool = await connectToDatabase()
+        const res = await pool.query(queries.UPDATE_POKEMON_CURRENT_HP_BY_ID, [sanitizedCurrentHp, this.id])
+
+        if (res.rowCount === 0) return null
+
+        this.currentHp = Number(res.rows[0].currentHp ?? sanitizedCurrentHp)
+        return this.currentHp
+    }
+
+    async addExperience(expAmount) {
+        const parsedExpAmount = Number(expAmount)
+        if (!Number.isFinite(parsedExpAmount)) return null
+
+        const nextExp = Math.max(0, Math.floor(Number(this.exp ?? 0) + parsedExpAmount))
+        this.exp = nextExp
+
+        if (!this.id) return this.exp
+
+        const pool = await connectToDatabase()
+        const res = await pool.query(queries.UPDATE_POKEMON_EXP_BY_ID, [nextExp, this.id])
+
+        if (res.rowCount === 0) return null
+
+        this.exp = Number(res.rows[0].exp ?? nextExp)
+        return this.exp
+    }
+
+    async spendMovePp(moveName, amount = 1) {
+        const normalizedMoveName = String(moveName || '').trim()
+        const parsedAmount = Number(amount)
+
+        if (!normalizedMoveName || !Number.isFinite(parsedAmount) || parsedAmount <= 0) return null
+
+        const move = this.moves.find(currentMove => currentMove.getName().toLowerCase() === normalizedMoveName.toLowerCase())
+        if (!move) return null
+
+        const currentPp = Number(move.getCurrentPp() ?? move.currentPp ?? move.getMaxPp() ?? 0)
+        const nextPp = Math.max(0, currentPp - Math.floor(parsedAmount))
+        move.currentPp = nextPp
+
+        if (!this.id) return nextPp
+
+        const pool = await connectToDatabase()
+        const res = await pool.query(queries.UPDATE_MOVE_CURRENT_PP_BY_POKEMON_AND_NAME, [nextPp, this.id, normalizedMoveName])
+
+        if (res.rowCount === 0) return null
+
+        move.currentPp = Number(res.rows[0].currentPp ?? nextPp)
+        return move.currentPp
+    }
+
     getName() {
         return this.name
     }
@@ -53,7 +163,7 @@ class Pokemon {
     }
 
     getCurrentHp() {
-        return this.currentHp
+        return Math.min(Number(this.currentHp ?? 0), this.getMaxHp())
     }
 
     getPrice() {
