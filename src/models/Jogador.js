@@ -74,10 +74,6 @@ class Jogador {
         return this.profileImage
     }
 
-    getPartnerPokemonId() {
-        return this.partnerPokemonId
-    }
-
     async setProfileImage(imageBuffer) {
         const pool = await connectToDatabase()
         await pool.query(queries.UPDATE_PLAYER_PROFILE_IMAGE, [imageBuffer, this.id])
@@ -97,7 +93,7 @@ class Jogador {
         return this.pokeCoins
     }
 
-    async setPartnerPokemonId(pokemonId) {
+    async setpartnerPokemon(pokemonId) {
         const parsedPokemonId = Number(pokemonId)
         if (!Number.isInteger(parsedPokemonId) || parsedPokemonId <= 0) return null
 
@@ -106,7 +102,8 @@ class Jogador {
 
         if (res.rowCount === 0) return null
 
-        this.partnerPokemonId = res.rows[0].partnerPokemonId ?? null
+        this.partnerPokemonId = Number(res.rows[0].partnerPokemonId ?? parsedPokemonId)
+
         return this.partnerPokemonId
     }
 
@@ -194,6 +191,54 @@ class Jogador {
     async getPokemonByName(pokemonName) {
         const pool = await connectToDatabase()
         const res = await pool.query(queries.GET_PLAYER_POKEMON_BY_NAME, [this.id, pokemonName])
+
+        if (res.rowCount === 0) return null
+
+        const pokemonRow = res.rows[0]
+        const movesRes = await pool.query(queries.GET_POKEMON_MOVES_BY_POKEMON_ID, [pokemonRow.id])
+        const pokemonMoves = movesRes.rows.map(moveRow => {
+            const move = new Move(
+                moveRow.name,
+                moveRow.type,
+                Number(moveRow.maxPp ?? 0),
+                Number(moveRow.power ?? 0),
+                Number(moveRow.accuracy ?? 100),
+                moveRow.moveCategory
+            )
+
+            move.currentPp = Number(moveRow.currentPp ?? move.getMaxPp())
+            return move
+        })
+
+        return new Pokemon(
+            pokemonRow.id,
+            pokemonRow.specieId,
+            pokemonRow.name,
+            pokemonRow.exp,
+            pokemonRow.currentHp,
+            pokemonRow.types,
+            pokemonRow.evolutionStage,
+            pokemonRow.nextEvolutionLevel,
+            {
+                hp: Number(pokemonRow.ivHp ?? 0),
+                speed: Number(pokemonRow.ivSpeed ?? 0),
+                attack: Number(pokemonRow.ivAttack ?? 0),
+                defense: Number(pokemonRow.ivDefense ?? 0),
+                specialAttack: Number(pokemonRow.ivSpecialAttack ?? 0),
+                specialDefense: Number(pokemonRow.ivSpecialDefense ?? 0)
+            },
+            null,
+            pokemonMoves,
+            pokemonRow.jogadorId ?? this.id
+        )
+    }
+
+    async getPokemonById(pokemonId) {
+        const parsedPokemonId = Number(pokemonId)
+        if (!Number.isInteger(parsedPokemonId) || parsedPokemonId <= 0) return null
+
+        const pool = await connectToDatabase()
+        const res = await pool.query(queries.GET_PLAYER_POKEMON_BY_ID, [this.id, parsedPokemonId])
 
         if (res.rowCount === 0) return null
 
@@ -335,7 +380,7 @@ class Jogador {
             row.pokeCoins ?? 500,
             row.diaryLogin ?? null,
             items,
-            row.partnerPokemonId ?? null
+            row.partnerPokemonId ?? null,
         )
     }
 

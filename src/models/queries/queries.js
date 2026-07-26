@@ -144,6 +144,30 @@ WHERE p."jogadorId" = $1
 LIMIT 1
 `
 
+export const GET_PLAYER_POKEMON_BY_ID = `
+SELECT
+	p.id,
+	p."specieId",
+	p.name,
+	p.exp,
+	p."currentHp",
+	p.types,
+	p."evolutionStage",
+	p."nextEvolutionLevel",
+	p."jogadorId",
+	iv.hp AS "ivHp",
+	iv.speed AS "ivSpeed",
+	iv.attack AS "ivAttack",
+	iv.defense AS "ivDefense",
+	iv."specialAttack" AS "ivSpecialAttack",
+	iv."specialDefense" AS "ivSpecialDefense"
+FROM "Pokemon" p
+LEFT JOIN "Iv" iv ON iv.id = p."ivId"
+WHERE p."jogadorId" = $1
+  AND p.id = $2
+LIMIT 1
+`
+
 export const GET_POKEMON_MOVES_BY_POKEMON_ID = `
 SELECT
 	m.name,
