@@ -1,0 +1,5 @@
+troca
+evoluir
+atacar
+nomes iguais
+comprar mais de um item no mesmo comando

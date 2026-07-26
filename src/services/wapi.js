@@ -1,6 +1,7 @@
 import axios from "axios"
 import dotenv from "dotenv"
 import pokemons from "../../assets/pokemons_webp_base64.json" with { type: "json" }
+import badges from "../../assets/badges_webp_base64.json" with { type: "json" }
 dotenv.config()
 
 const SUPPORTED_IMAGE_MIME_TYPES = new Set(['image/png', 'image/jpeg', 'image/jpg'])
@@ -60,7 +61,7 @@ export async function sendSticker(phone, randomId) { // arrumar para sendPokemon
         console.error('sendSticker: phone ou stickerId está vazio!')
         return
     }
-
+ 
     const sticker = `data:image/png;base64,${pokemons[`poke_${randomId}`]}`
 
     const instanceId = process.env.WAPI_INSTANCE_ID
@@ -86,13 +87,13 @@ export async function sendSticker(phone, randomId) { // arrumar para sendPokemon
     }
 }
 
-export async function sendStickerBadge(phone, urlSticker) { // mudar para uma func sendSticker default
-    if (!phone || !urlSticker) {
-        console.error('sendStickerBadge: phone ou stickerUrl está vazio!')
+export async function sendStickerBadge(phone, badgeName) { // mudar para uma func sendSticker default
+    if (!phone || !badgeName) {
+        console.error('sendStickerBadge: phone ou badgeName está vazio!')
         return
     }
 
-    const sticker = urlSticker
+    const sticker = `data:image/png;base64,${badges[badgeName]}`
 
     const instanceId = process.env.WAPI_INSTANCE_ID
     const token = process.env.WAPI_TOKEN
