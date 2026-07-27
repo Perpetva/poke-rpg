@@ -253,6 +253,17 @@ class Pokemon {
 
         return xpProximo - xpAtual
     }
+
+    heal() {
+        const currentHp = this.getCurrentHp()
+        const newHp = currentHp + Math.floor(this.getMaxHp() * 0.33)
+
+        if (newHp > this.getMaxHp()) {
+            return this.setCurrentHp(this.getMaxHp())
+        }
+
+        return this.setCurrentHp(newHp)
+    }
 }
 
 export default Pokemon

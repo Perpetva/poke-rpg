@@ -449,6 +449,10 @@ class Jogador {
             typeName
         }
     }
+
+    usePotion() {
+        return this.updateItem('potion', -1)
+    }
 }
 
 export default Jogador
