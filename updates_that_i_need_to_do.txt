@@ -2,7 +2,5 @@ troca
 evoluir
 nomes iguais
 comprar mais de um item no mesmo comando
-fraquezas
-curar
-reviver
+Pokestop
 

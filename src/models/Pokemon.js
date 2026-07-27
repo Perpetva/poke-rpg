@@ -264,6 +264,10 @@ class Pokemon {
 
         return this.setCurrentHp(newHp)
     }
+
+    revive() {
+        return this.setCurrentHp(1)
+    }
 }
 
 export default Pokemon
