@@ -92,6 +92,14 @@ function formatMultiplier(multiplier) {
     return isInteger ? `${rounded}x` : `${rounded.toFixed(2).replace(/\.00$/, '').replace(/0$/, '')}x`
 }
 
+function formatHp(currentHp, maxHp) {
+    return `${Math.max(0, Number(currentHp ?? 0))}/${Math.max(0, Number(maxHp ?? 0))}`
+}
+
+function getSideIcon(side) {
+    return side === 'player' ? '👤' : '🤖'
+}
+
 export default {
     name: 'atacar',
     description: 'Tenta atacar o pokémon spawnado',
@@ -143,9 +151,10 @@ export default {
 
         const battleLog = []
 
-        const resolveAttack = async (attacker, defender, move, attackerPokemon = null) => {
-            const attackerName = firstLetterUpperCase(attacker.getName())
-            const defenderName = firstLetterUpperCase(defender.getName())
+        const resolveAttack = async (attacker, defender, move, attackerPokemon = null, attackerSide = 'computer') => {
+            const defenderSide = attackerSide === 'player' ? 'computer' : 'player'
+            const attackerIcon = getSideIcon(attackerSide)
+            const defenderIcon = getSideIcon(defenderSide)
             const accuracyRoll = randomNumber(1, 100)
 
             if (attackerPokemon) {
@@ -155,7 +164,7 @@ export default {
             }
 
             if (accuracyRoll > move.accuracy) {
-                battleLog.push(`❌ ${attackerName} usou *${firstLetterUpperCase(move.name)}* e errou!`)
+                battleLog.push(`❌ ${attackerIcon} usou *${firstLetterUpperCase(move.name)}* e errou!`)
                 return 0
             }
 
@@ -170,11 +179,11 @@ export default {
             }
 
             battleLog.push(
-                `⚔️ ${attackerName} usou *${firstLetterUpperCase(move.name)} (${formatMultiplier(typeMultiplier)})* em ${defenderName} e causou *${damage}* de dano.`
+                `⚔️ ${attackerIcon} usou *${firstLetterUpperCase(move.name)} (${formatMultiplier(typeMultiplier)})* e causou *${damage}* de dano em ${defenderIcon}.`
             )
 
             if (nextHp <= 0) {
-                battleLog.push(`💥 ${defenderName} desmaiou.`)
+                battleLog.push(`💥 ${defenderIcon} desmaiou.`)
             }
 
             return damage
@@ -183,15 +192,17 @@ export default {
         const playerFirst = attackerFirst === 'player'
 
         if (playerFirst) {
-            await resolveAttack(partnerPokemon, currentComputerPokemon, playerRandomMove, partnerPokemon)
-            await resolveAttack(currentComputerPokemon, partnerPokemon, computerRandomMove)
+            await resolveAttack(partnerPokemon, currentComputerPokemon, playerRandomMove, partnerPokemon, 'player')
+            await resolveAttack(currentComputerPokemon, partnerPokemon, computerRandomMove, null, 'computer')
         } else {
-            await resolveAttack(currentComputerPokemon, partnerPokemon, computerRandomMove)
-            await resolveAttack(partnerPokemon, currentComputerPokemon, playerRandomMove, partnerPokemon)
+            await resolveAttack(currentComputerPokemon, partnerPokemon, computerRandomMove, null, 'computer')
+            await resolveAttack(partnerPokemon, currentComputerPokemon, playerRandomMove, partnerPokemon, 'player')
         }
 
         const playerRemainingHp = Number(partnerPokemon.getCurrentHp() ?? partnerPokemon.currentHp ?? 0)
         const computerRemainingHp = Number(currentComputerPokemon.getCurrentHp?.() ?? currentComputerPokemon.currentHp ?? 0)
+        const playerMaxHp = Number(partnerPokemon.getMaxHp?.() ?? partnerPokemon.getBattleHp?.() ?? 0)
+        const computerMaxHp = Number(currentComputerPokemon.getMaxHp?.() ?? currentComputerPokemon.getBattleHp?.() ?? 0)
 
         let xpMessage = ''
 
@@ -206,11 +217,9 @@ export default {
 
         const resultMessage = [
             `🎯 Turno de ${currentPlayer.getName()}!`,
-            `\nSeu Pokémon: *${firstLetterUpperCase(partnerPokemon.getName())}*`,
-            `HP: ${playerRemainingHp}`,
+            `\n👤 ${firstLetterUpperCase(partnerPokemon.getName())} HP: ${formatHp(playerRemainingHp, playerMaxHp)}`,
             `Movimento: *${firstLetterUpperCase(playerRandomMove.name)}*`,
-            `\nPokémon spawnado: *${firstLetterUpperCase(currentComputerPokemon.getName())}*`,
-            `HP: ${Math.max(0, computerRemainingHp)}`,
+            `\n🤖 HP: ${formatHp(computerRemainingHp, computerMaxHp)}`,
             `Movimento: *${firstLetterUpperCase(computerRandomMove.name)}*`,
             `\n${battleLog.join('\n')}`,
             xpMessage,

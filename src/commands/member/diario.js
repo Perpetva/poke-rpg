@@ -15,7 +15,7 @@ export default {
             return await sendMessage(groupId, `❌ ${currentPlayer.getName()} Você já coletou sua recompensa diária hoje! Volte amanhã.`)
         }
 
-        const randomPokecoins = randomNumber(200, 400)
+        const randomPokecoins = randomNumber(300, 500)
         const hoje = new Date().toISOString().split('T')[0]
 
         await currentPlayer.refreshDailyLogin(hoje)

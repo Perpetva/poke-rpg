@@ -387,6 +387,18 @@ class Jogador {
         return Jogador.fromDbRow(res.rows[0])
     }
 
+    static async getPlayerByName(name) {
+        const normalizedName = String(name || '').trim()
+        if (!normalizedName) return null
+
+        const pool = await connectToDatabase()
+        const res = await pool.query(queries.GET_PLAYER_BY_NAME, [normalizedName])
+
+        if (res.rowCount === 0) return null
+
+        return Jogador.fromDbRow(res.rows[0])
+    }
+
     static fromDbRow(row) {
         const items = Item.fromDbRow(row)
 
