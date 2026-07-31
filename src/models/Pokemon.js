@@ -200,6 +200,7 @@ class Pokemon {
 
     async escapePokemonChance() {
         const chance = await randomNumber(1, 100)
+        console.log('CHANCE:', chance)
         if (chance <= ESCAPE_CHANCE)
             return true
         

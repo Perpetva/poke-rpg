@@ -1,9 +1,9 @@
 evoluir
-comprar mais de um item no mesmo comando
-arrumar o vender
-Pokestop
+comprar/vender mais de um item no mesmo comando
 mudar os movimentos
-
+colocar mais recompensa no diario // itens
+cura total
+doce raro
 
 
 
