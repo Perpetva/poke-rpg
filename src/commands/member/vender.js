@@ -17,29 +17,30 @@ export default {
             return await sendMessage(groupId, `⚠️ Indique o nome do que deseja vender.\n> ${currentPlayer.getName()}`)
 
         const items = ['pokebola', 'pocao', 'reviver', 'cura total', 'doce raro', 'elixir']
+        const quantity = parseInt(args[1]) || 1
 
         if (itemOrPokemonToSell && items.includes(itemOrPokemonToSell)) {
-            const itemToSell = args.join(' ').toLowerCase()
+            const itemToSell = itemOrPokemonToSell.toLowerCase()
 
             switch (itemToSell) {
                 case 'pokebola':
-                    return await sellItem(currentPlayer, groupId, 'pokebola', POKEBALL_PRICE)
+                    return await sellItem(currentPlayer, groupId, 'pokebola', POKEBALL_PRICE, quantity)
                     break
 
                 case 'pocao':
-                    return await sellItem(currentPlayer, groupId, 'pocao', POTION_PRICE)
+                    return await sellItem(currentPlayer, groupId, 'pocao', POTION_PRICE, quantity)
                     break
 
                 case 'reviver':
-                    return await sellItem(currentPlayer, groupId, 'reviver', REVIVE_PRICE)
+                    return await sellItem(currentPlayer, groupId, 'reviver', REVIVE_PRICE, quantity)
                     break
 
                 case 'cura total':
-                    return await sellItem(currentPlayer, groupId, 'cura total', FULL_RESTORE_PRICE)
+                    return await sellItem(currentPlayer, groupId, 'cura total', FULL_RESTORE_PRICE, quantity)
                     break
 
                 case 'doce raro':
-                    return await sellItem(currentPlayer, groupId, 'doce raro', RARE_CANDY_PRICE)
+                    return await sellItem(currentPlayer, groupId, 'doce raro', RARE_CANDY_PRICE, quantity)
                     break
 
                 default:

@@ -15,27 +15,28 @@ export default {
         if (args.length === 0)
             return await sendMessage(groupId, '⚠️ Por favor, especifique o item que deseja comprar.')
 
-        const itemName = args.join(' ').toLowerCase()
+        const itemName = args[0]?.trim().toLowerCase()
+        const quantity = parseInt(args[1]) || 1
 
         switch (itemName) {
             case 'pokebola':
-                await buyItem(currentPlayer, groupId, 'pokebola', POKEBALL_PRICE)
+                await buyItem(currentPlayer, groupId, 'pokebola', POKEBALL_PRICE, quantity)
                 break
 
             case 'pocao':
-                await buyItem(currentPlayer, groupId, 'pocao', POTION_PRICE)
+                await buyItem(currentPlayer, groupId, 'pocao', POTION_PRICE, quantity)
                 break
 
             case 'reviver':
-                await buyItem(currentPlayer, groupId, 'reviver', REVIVE_PRICE)
+                await buyItem(currentPlayer, groupId, 'reviver', REVIVE_PRICE, quantity)
                 break
 
             case 'cura total':
-                await buyItem(currentPlayer, groupId, 'cura_total', FULL_RESTORE_PRICE)
+                await buyItem(currentPlayer, groupId, 'cura_total', FULL_RESTORE_PRICE, quantity)
                 break
 
             case 'doce raro':
-                await buyItem(currentPlayer, groupId, 'doce_raro', RARE_CANDY_PRICE)
+                await buyItem(currentPlayer, groupId, 'doce_raro', RARE_CANDY_PRICE, quantity)
                 break
 
             default:
