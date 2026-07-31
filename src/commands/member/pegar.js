@@ -25,7 +25,7 @@ export default {
 
         if (currentPokemonSpawned.alreadyCaught === true) {
             if (typedPokemonName === currentPokemon.name.toLowerCase())
-                return await sendMessage(groupId, `O pokemon ${currentPokemon.name} já foi pego ou morto.`)
+                return await sendMessage(groupId, `O pokemon ${currentPokemon.name} fugiu foi pego ou morto..`)
 
             return await sendMessage(groupId, `O pokemon ${currentPokemon.name} já foi pego e além disso você digitou o nome errado!`)
         }
@@ -46,6 +46,12 @@ export default {
             if (await currentPokemon.escapePokemonChance()) {
                 setCooldown(userPhone, 120000)
                 await currentPlayer.updateItem('pokebola', -1)
+
+                if (await currentPokemon.fledChance()) {
+                    currentPokemonSpawned.alreadyCaught = true
+                    return await sendMessage(groupId, `${currentPlayer.getName()}, o Pokémon ${currentPokemon.name} fugiu! 💨`)
+                }
+
                 return await sendMessage(groupId, `${currentPlayer.getName()}, o Pokémon ${currentPokemon.name} escapou! 😢 Você poderá tentar novamente em 2 minutos.`)
             }
 

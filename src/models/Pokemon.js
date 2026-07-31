@@ -1,7 +1,7 @@
 import { randomNumber } from '../utils/commonFunctions.js'
 import { connectToDatabase } from '../database/connectionDatabase.js'
 import * as queries from './queries/queries.js'
-import { XP_MAX, NIVEL_MAX, NIVEL_MIN } from "../pokemon/config/config.js"
+import { XP_MAX, NIVEL_MAX, NIVEL_MIN, FLED_CHANCE, ESCAPE_CHANCE } from "../pokemon/config/config.js"
 
 class Pokemon {
     constructor(
@@ -200,7 +200,15 @@ class Pokemon {
 
     async escapePokemonChance() {
         const chance = await randomNumber(1, 100)
-        if (chance <= 25)
+        if (chance <= ESCAPE_CHANCE)
+            return true
+        
+        return false
+    }
+
+    async fledChance() {
+        const chance = await randomNumber(1, 100)
+        if (chance <= FLED_CHANCE)
             return true
 
         return false

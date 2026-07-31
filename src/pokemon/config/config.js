@@ -9,3 +9,7 @@ export const XP_MAX = 1000000
 export const NIVEL_MAX = 100
 
 export const NIVEL_MIN = 1
+
+export const FLED_CHANCE = 10
+
+export const ESCAPE_CHANCE = 35
