@@ -1,53 +1,8 @@
-troca
 evoluir
-nomes iguais //
 comprar mais de um item no mesmo comando
+arrumar o vender
 Pokestop
-Mudar nome
 mudar os movimentos
-
-- provavel
-// sisteminha de mochila
-
-
-
-!trocar chapisco
-
-@numerodetelefone(id)@c.us, nemummes quer trocar com você, digite !trocar nemummes para prosseguir.
-
-!trocar nemummes
-
-Uma troca foi iniciada entre nemummes e chapisco..
-use !adicionar para adicionar um pokemon ou moedas
-
-!adicionar charmander
-
-o pokemon charmander foi adicionado a troca
-
-!adicionar pikachu
-!adicionar charizard
-!adicionar 6000
-
-!adicionar 1
-
-!remover charizard
-
-Status:
-nemummes: charmander, (outros pokemons (se ouver))
-chapisco: pikachu, $6000, $1
-> A troca é cancelada em 3 minutos
-
-para finalizar a troca escreva !finalizar.
-
-!finalizar
-
-Chapisco finalizou a troca, aguardando por nemummes
-
-!finalizar
-
-Ambos finalizaram a troca:
-nemummes: charmander, (outros pokemons (se ouver))
-chapisco: pikachu, $6000, $1
 
 
 

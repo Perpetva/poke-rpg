@@ -7,6 +7,7 @@ export default {
     description: 'Muda o nome do jogador',
     async execute(objMessage, args, userPhone, groupId) {
         const currentPlayer = await Jogador.getPlayerById(userPhone)
+        const newName = args.join(' ')
 
         if (!currentPlayer)
             return await sendMessage(groupId, '⚠️ Você precisa se registrar primeiro usando o comando !registrar *seu nick*')
@@ -14,10 +15,12 @@ export default {
         if (currentPlayer.getPokeCoins() < CHANGE_NAME_PRICE)
             return await sendMessage(groupId, `❌ Você não tem PokéCoins suficientes para mudar seu nome. O custo é de ${CHANGE_NAME_PRICE} PokéCoins.`)
 
-        if (args.length === 0)
+        if (!newName)
             return await sendMessage(groupId, '⚠️ Por favor, especifique o novo nome do jogador.')
 
-        const newName = args.join(' ')
+        if (await Jogador.getPlayerByName(newName)) 
+            return await sendMessage(groupId, 'Este nick já está sendo usado por outro jogador!')
+
         currentPlayer.setName(newName)
 
         const newPokeCoinsValue = currentPlayer.getPokeCoins() - CHANGE_NAME_PRICE
