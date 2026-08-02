@@ -265,7 +265,7 @@ class Pokemon {
 
     heal() {
         const currentHp = this.getCurrentHp()
-        const newHp = currentHp + Math.floor(this.getMaxHp() * 0.33)
+        const newHp = currentHp + 30
 
         if (newHp > this.getMaxHp()) {
             return this.setCurrentHp(this.getMaxHp())

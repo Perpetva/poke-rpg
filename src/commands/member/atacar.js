@@ -6,6 +6,7 @@ import { calculateDamageMultiplier } from '../../pokemon/mappers/damageCalculato
 import { randomNumber } from '../../utils/commonFunctions.js'
 import { currentPokemonSpawned } from '../../pokemon/pokemonSpawn.js'
 import { setPokemonAtual } from '../../pokemon/pokemonStructures.js'
+import { delay } from '../../utils/commonFunctions.js'
 
 function getMoveCurrentPp(move) {
     return Number(move?.currentPp ?? move?.pp ?? move?.maxPp ?? 0)
@@ -100,6 +101,10 @@ function getSideIcon(side) {
     return side === 'player' ? '👤' : '🤖'
 }
 
+function getSideLabel(side) {
+    return side === 'player' ? '👤' : '🤖 Pokemon Selvagem'
+}
+
 export default {
     name: 'atacar',
     description: 'Tenta atacar o pokémon spawnado',
@@ -149,8 +154,6 @@ export default {
                 ? 'computer'
                 : (randomNumber(0, 1) === 0 ? 'player' : 'computer')
 
-        const battleLog = []
-
         const resolveAttack = async (attacker, defender, move, attackerPokemon = null, attackerSide = 'computer') => {
             const defenderSide = attackerSide === 'player' ? 'computer' : 'player'
             const attackerIcon = getSideIcon(attackerSide)
@@ -178,33 +181,126 @@ export default {
                 defender.currentHp = nextHp
             }
 
-            battleLog.push(
-                `⚔️ ${attackerIcon} usou *${firstLetterUpperCase(move.name)} (${formatMultiplier(typeMultiplier)})* e causou *${damage}* de dano em ${defenderIcon}.`
-            )
-
-            if (nextHp <= 0) {
-                battleLog.push(`💥 ${defenderIcon} desmaiou.`)
+            return {
+                damage,
+                typeMultiplier,
+                nextHp,
+                attackerIcon,
+                defenderIcon
             }
-
-            return damage
         }
 
-        const playerFirst = attackerFirst === 'player'
-
-        if (playerFirst) {
-            await resolveAttack(partnerPokemon, currentComputerPokemon, playerRandomMove, partnerPokemon, 'player')
-            await resolveAttack(currentComputerPokemon, partnerPokemon, computerRandomMove, null, 'computer')
-        } else {
-            await resolveAttack(currentComputerPokemon, partnerPokemon, computerRandomMove, null, 'computer')
-            await resolveAttack(partnerPokemon, currentComputerPokemon, playerRandomMove, partnerPokemon, 'player')
-        }
-
-        const playerRemainingHp = Number(partnerPokemon.getCurrentHp() ?? partnerPokemon.currentHp ?? 0)
-        const computerRemainingHp = Number(currentComputerPokemon.getCurrentHp?.() ?? currentComputerPokemon.currentHp ?? 0)
+        const playerCurrentHp = Number(partnerPokemon.getCurrentHp() ?? partnerPokemon.currentHp ?? 0)
+        const computerCurrentHp = Number(currentComputerPokemon.getCurrentHp?.() ?? currentComputerPokemon.currentHp ?? 0)
         const playerMaxHp = Number(partnerPokemon.getMaxHp?.() ?? partnerPokemon.getBattleHp?.() ?? 0)
         const computerMaxHp = Number(currentComputerPokemon.getMaxHp?.() ?? currentComputerPokemon.getBattleHp?.() ?? 0)
 
-        let xpMessage = ''
+        const initialMessage = [
+            `🎯 Batalha de ${currentPlayer.getName()}!`,
+            ``,
+            `👤 ${firstLetterUpperCase(partnerPokemon.getName())} HP: ${formatHp(playerCurrentHp, playerMaxHp)}`,
+            `Movimento: *${firstLetterUpperCase(playerRandomMove.name)}*`,
+            ``,
+            `🤖 Pokemon Selvagem HP: ${formatHp(computerCurrentHp, computerMaxHp)}`,
+            `Movimento: *${firstLetterUpperCase(computerRandomMove.name)}*`
+        ].join('\n')
+
+        await sendMessage(groupId, initialMessage)
+        await delay(1500)
+
+        const playerFirst = attackerFirst === 'player'
+        const firstAttacker = playerFirst
+            ? {
+                side: 'player',
+                attacker: partnerPokemon,
+                defender: currentComputerPokemon,
+                move: playerRandomMove,
+                pokemonInstance: partnerPokemon
+            }
+            : {
+                side: 'computer',
+                attacker: currentComputerPokemon,
+                defender: partnerPokemon,
+                move: computerRandomMove,
+                pokemonInstance: null
+            }
+
+        const secondAttacker = playerFirst
+            ? {
+                side: 'computer',
+                attacker: currentComputerPokemon,
+                defender: partnerPokemon,
+                move: computerRandomMove,
+                pokemonInstance: null
+            }
+            : {
+                side: 'player',
+                attacker: partnerPokemon,
+                defender: currentComputerPokemon,
+                move: playerRandomMove,
+                pokemonInstance: partnerPokemon
+            }
+
+        const firstAttackResult = await resolveAttack(
+            firstAttacker.attacker,
+            firstAttacker.defender,
+            firstAttacker.move,
+            firstAttacker.pokemonInstance,
+            firstAttacker.side
+        )
+
+        await sendMessage(
+            groupId,
+            `⚔️ ${firstAttacker.side === 'player' ? firstAttacker.attacker.getName() : 'Pokemon Selvagem'} usou ${firstLetterUpperCase(firstAttacker.move.name)} (${formatMultiplier(firstAttackResult.typeMultiplier)}) e causou ${firstAttackResult.damage} de dano no ${firstAttacker.side === 'player' ? 'pokemon selvagem' : 'jogador'}.`
+        )
+
+        const firstDefenderIsComputer = firstAttacker.side === 'player'
+        const firstDefenderCurrentHp = firstDefenderIsComputer
+            ? Number(currentComputerPokemon.getCurrentHp?.() ?? currentComputerPokemon.currentHp ?? 0)
+            : Number(partnerPokemon.getCurrentHp() ?? partnerPokemon.currentHp ?? 0)
+
+        if (firstDefenderCurrentHp <= 0) {
+            const defeatedPokemonName = firstDefenderIsComputer
+                ? firstLetterUpperCase(currentComputerPokemon.name)
+                : firstLetterUpperCase(partnerPokemon.getName())
+            const winnerPokemonName = firstDefenderIsComputer
+                ? firstLetterUpperCase(partnerPokemon.getName())
+                : 'Pokemon Selvagem'
+            const winnerPokemon = firstDefenderIsComputer ? partnerPokemon : currentComputerPokemon
+            const earnedExp = firstDefenderIsComputer
+                ? Math.max(10, Math.floor(currentComputerPokemon.getLevel() * 20 + currentComputerPokemon.getBattleHp() / 4))
+                : 0
+
+            if (firstDefenderIsComputer) {
+                await winnerPokemon.addExperience(earnedExp)
+                currentPokemonSpawned.alreadyCaught = true
+                currentPokemonSpawned.number = null
+                setPokemonAtual(null)
+            }
+
+            const defeatMessage = firstDefenderIsComputer
+                ? `💥 ${defeatedPokemonName} desmaiou.\n\n🌟 ${winnerPokemonName} ganhou *${earnedExp} XP*.`
+                : `💥 ${defeatedPokemonName} desmaiou.`
+
+            await sendMessage(groupId, defeatMessage)
+            return
+        }
+
+        const secondAttackResult = await resolveAttack(
+            secondAttacker.attacker,
+            secondAttacker.defender,
+            secondAttacker.move,
+            secondAttacker.pokemonInstance,
+            secondAttacker.side
+        )
+
+        await sendMessage(
+            groupId,
+            `⚔️ ${secondAttacker.side === 'player' ? secondAttacker.attacker.getName() : 'Pokemon Selvagem'} usou ${firstLetterUpperCase(secondAttacker.move.name)} (${formatMultiplier(secondAttackResult.typeMultiplier)}) e causou ${secondAttackResult.damage} de dano no ${secondAttacker.side === 'player' ? 'pokemon selvagem' : 'jogador'}.`
+        )
+
+        const playerRemainingHp = Number(partnerPokemon.getCurrentHp() ?? partnerPokemon.currentHp ?? 0)
+        const computerRemainingHp = Number(currentComputerPokemon.getCurrentHp?.() ?? currentComputerPokemon.currentHp ?? 0)
 
         if (computerRemainingHp <= 0) {
             const earnedExp = Math.max(10, Math.floor(currentComputerPokemon.getLevel() * 20 + currentComputerPokemon.getBattleHp() / 4))
@@ -212,21 +308,12 @@ export default {
             currentPokemonSpawned.alreadyCaught = true
             currentPokemonSpawned.number = null
             setPokemonAtual(null)
-            xpMessage = `\n\n🌟 ${firstLetterUpperCase(partnerPokemon.getName())} ganhou *${earnedExp} XP*.`
+
+            await sendMessage(
+                groupId,
+                `💥 ${firstLetterUpperCase(currentComputerPokemon.name())} desmaiou.\n\n🌟 ${firstLetterUpperCase(partnerPokemon.getName())} ganhou *${earnedExp} XP*.`
+            )
         }
-
-        const resultMessage = [
-            `🎯 Turno de ${currentPlayer.getName()}!`,
-            `\n👤 ${firstLetterUpperCase(partnerPokemon.getName())} HP: ${formatHp(playerRemainingHp, playerMaxHp)}`,
-            `Movimento: *${firstLetterUpperCase(playerRandomMove.name)}*`,
-            `\n🤖 HP: ${formatHp(computerRemainingHp, computerMaxHp)}`,
-            `Movimento: *${firstLetterUpperCase(computerRandomMove.name)}*`,
-            `\n${battleLog.join('\n')}`,
-            xpMessage,
-            computerRemainingHp <= 0 ? `\n✅ O pokémon spawnado foi derrotado..` : ''
-        ].join('\n')
-
-        return await sendMessage(groupId, resultMessage.trim())
 
     }
 }

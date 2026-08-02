@@ -23,6 +23,8 @@ export default {
         const newPokecoins = currentPlayer.getPokeCoins() + randomPokecoins
         await currentPlayer.setPokeCoins(newPokecoins)
 
-        return await sendMessage(groupId, `${currentPlayer.getName()} recebeu sua recompensa diária de ${randomPokecoins} PokéCoins!\n💰 Saldo atual: ${currentPlayer.getPokeCoins()} PokéCoins`)
+        const quantityItems = randomNumber(1, 3) 
+
+        return await sendMessage(groupId, `${currentPlayer.getName()} recebeu sua recompensa diária:\n\n*₹${randomPokecoins} PokéCoins!*`)
     }
 }

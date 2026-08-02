@@ -1,9 +1,11 @@
 evoluir
-comprar/vender mais de um item no mesmo comando
 mudar os movimentos
 colocar mais recompensa no diario // itens
 cura total
 doce raro
-
+lendarios?
+usar mais de um item de uma vez
+depois de cada ganhada de xp //atacar //doce raro verificar se o pokemon subiu de nivel
+ajustar valor de venda com o xp
 
 
