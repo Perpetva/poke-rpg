@@ -263,9 +263,9 @@ class Pokemon {
         return xpProximo - xpAtual
     }
 
-    heal() {
+    heal(quantity = 1) {
         const currentHp = this.getCurrentHp()
-        const newHp = currentHp + 30
+        const newHp = currentHp + 20 * quantity
 
         if (newHp > this.getMaxHp()) {
             return this.setCurrentHp(this.getMaxHp())

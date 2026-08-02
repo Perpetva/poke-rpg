@@ -8,6 +8,7 @@ export default {
     async execute(objMessage, args, userPhone, groupId) {
         const currentPlayer = await Jogador.getPlayerById(userPhone)
         const pokemonName = args[0]?.trim()
+        const quantity = parseInt(args[1]) || 1
     
         if (!currentPlayer)
             return await sendMessage(groupId, '⚠️ Você precisa se registrar primeiro usando o comando !registrar *seu nick*')
@@ -23,14 +24,14 @@ export default {
         if (currentPokemon.getCurrentHp() === currentPokemon.getMaxHp())
             return await sendMessage(groupId, `⚠️ O pokémon ${firstLetterUpperCase(pokemonName)} já está com a vida cheia!`)
 
-        if (currentPlayer.getPocao() <= 0)
-            return await sendMessage(groupId, '⚠️ Você não possui poções para curar seu pokémon!')
+        if (currentPlayer.getPocao() <= quantity)
+            return await sendMessage(groupId, `⚠️ Você não possui ${quantity} poção(ões) para curar seu pokémon!`)
 
         if (currentPokemon.getCurrentHp() <= 0)
             return await sendMessage(groupId, `❌ O pokémon ${firstLetterUpperCase(pokemonName)} está desmaiado!, use !reviver para trazê-lo de volta!`)
 
-        await currentPlayer.updateItem("pocao", -1)
-        await currentPokemon.heal()
+        await currentPlayer.updateItem("pocao", -quantity)
+        await currentPokemon.heal(quantity)
         await sendMessage(groupId, `✅ O pokémon ${firstLetterUpperCase(pokemonName)} foi curado, agora ele possuí ${currentPokemon.getCurrentHp()}/${currentPokemon.getMaxHp()} de vida!`)
     }
 }
